@@ -22,6 +22,7 @@ public class ArrayIndexedCollection extends Collection {
             throw new IllegalArgumentException("Inicijalni kapacitet mora biti veći od 0!");
         }
         elements = new Object[initialCapacity];
+        size = 0;
     }
 
     /**
@@ -50,8 +51,6 @@ public class ArrayIndexedCollection extends Collection {
         } else {
             elements = new Object[initialCapacity];
         }
-
-        size = elements.length;
 
         addAll(other);
     }
