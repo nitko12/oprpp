@@ -125,6 +125,41 @@ public class ArrayIndexedCollection extends Collection {
         --size;
     }
 
+    @Override
+    public boolean contains(Object value) {
+        return indexOf(value) != -1;
+    }
+
+    @Override
+    public boolean remove(Object value) {
+        int index = indexOf(value);
+
+        if (index == -1) {
+            return false;
+        }
+
+        remove(index);
+        return true;
+    }
+
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[size];
+
+        for (int i = 0; i < size; i++) {
+            array[i] = elements[i];
+        }
+
+        return array;
+    }
+
+    @Override
+    public void forEach(Processor processor) {
+        for (int i = 0; i < size; i++) {
+            processor.process(elements[i]);
+        }
+    }
+
     private void doubleArraySize() {
         Object[] newArray = new Object[elements.length * 2];
 
