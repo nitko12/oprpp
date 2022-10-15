@@ -54,6 +54,10 @@ buildNumber.properties
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+.idea/
+
 # Local History for Visual Studio Code
 .history/
 
