@@ -8,7 +8,7 @@ public class ArrayIndexedCollection extends Collection {
     private Object[] elements;
 
     /**
-     * Default konstruktor koji postavlja kapacitet na 16.
+     * Konstruktor koji postavlja kapacitet na 16.
      */
     public ArrayIndexedCollection() {
         this(DEFAULT_CAPACITY);
@@ -98,6 +98,9 @@ public class ArrayIndexedCollection extends Collection {
     /**
      * Vraća element na zadanom indeksu.
      * 
+     * @throws IndexOutOfBoundsException ako je indeks manji od 0 ili veći od
+     *                                   veličine kolekcije.
+     * 
      * @param index
      * @return Object
      */
@@ -112,6 +115,9 @@ public class ArrayIndexedCollection extends Collection {
 
     /**
      * Dodaje element value na zadanu poziciju.
+     * 
+     * @throws IndexOutOfBoundsException ako je indeks manji od 0 ili veći od
+     *                                   veličine kolekcije.
      * 
      * @param value
      * @param position
@@ -161,6 +167,9 @@ public class ArrayIndexedCollection extends Collection {
 
     /**
      * Briše element na zadanom indeksu.
+     * 
+     * @throws IndexOutOfBoundsException ako je indeks manji od 0 ili veći od
+     *                                   veličine kolekcije.
      * 
      * @param index
      */
