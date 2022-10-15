@@ -1,5 +1,9 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * Apstraktna kolekcija koja sadrži metode koje su zajedničke svim kolekcijama,
+ * no nisu jednako implementirane.
+ */
 public class Collection {
     /**
      * Default konstruktor.

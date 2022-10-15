@@ -1,5 +1,8 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * Implementacija kolekcije koja se temelji na polju.
+ */
 public class ArrayIndexedCollection extends Collection {
 
     public static final int DEFAULT_CAPACITY = 16;

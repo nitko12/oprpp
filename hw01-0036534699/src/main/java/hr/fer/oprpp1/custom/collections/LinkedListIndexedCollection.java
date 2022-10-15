@@ -1,5 +1,8 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * Implementacija duplo povezane liste.
+ */
 public class LinkedListIndexedCollection extends Collection {
     private static class ListNode {
         ListNode prev, next;
@@ -24,10 +27,20 @@ public class LinkedListIndexedCollection extends Collection {
         addAll(collection);
     }
 
+    /**
+     * Vraca velicinu kolekcije.
+     * 
+     * @return int
+     */
     public int size() {
         return size;
     }
 
+    /**
+     * Dodaje element na kraj kolekcije.
+     * 
+     * @param value
+     */
     public void add(Object value) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
@@ -36,18 +49,24 @@ public class LinkedListIndexedCollection extends Collection {
         ListNode node = new ListNode();
         node.val = value;
 
-        if (first == null && last == null) {
+        if (first == null) {
             first = node;
             last = node;
         } else {
-            node.prev = last;
             last.next = node;
+            node.prev = last;
             last = node;
         }
 
         ++size;
     }
 
+    /**
+     * Dohvaća element na zadanom indeksu.
+     * 
+     * @param index
+     * @return Object
+     */
     public Object get(int index) {
         return getNode(index).val;
     }
@@ -60,6 +79,15 @@ public class LinkedListIndexedCollection extends Collection {
         size = 0;
     }
 
+    /**
+     * Umece element na zadanu poziciju.
+     * 
+     * @throws IndexOutOfBoundsException ako je index manji od 0 ili veci od size
+     *                                   (smije biti jednak size).
+     * 
+     * @param value
+     * @param position
+     */
     public void insert(Object value, int position) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
@@ -77,6 +105,7 @@ public class LinkedListIndexedCollection extends Collection {
             last.next.prev = last;
             last = last.next;
 
+            ++size;
             return;
         }
 
@@ -96,6 +125,12 @@ public class LinkedListIndexedCollection extends Collection {
         ++size;
     }
 
+    /**
+     * Vraca poziciju na kojoj se neka vrijednost nalazi.
+     * 
+     * @param value
+     * @return int
+     */
     public int indexOf(Object value) {
         if (value == null) {
             return -1;
@@ -114,15 +149,30 @@ public class LinkedListIndexedCollection extends Collection {
         return -1;
     }
 
+    /**
+     * Uklanja element na zadanom indeksu.
+     * 
+     * @param index
+     */
     public void remove(int index) {
 
         ListNode node = getNode(index);
 
-        if (node.prev == null) {
+        if (node.prev == null && node.next == null) {
+            first = null;
+            last = null;
+        } else if (node.prev == null) {
             first = node.next;
+            first.prev = null;
+        } else if (node.next == null) {
+            last = node.prev;
+            last.next = null;
+        } else {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
         }
 
-        node.prev.next = node.next;
+        --size;
     }
 
     /**
@@ -156,8 +206,9 @@ public class LinkedListIndexedCollection extends Collection {
 
         ListNode node = first;
 
+        int i = 0;
         while (node != null) {
-            arr[size - 1] = node.val;
+            arr[i++] = node.val;
 
             node = node.next;
         }
@@ -180,6 +231,22 @@ public class LinkedListIndexedCollection extends Collection {
         }
     }
 
+    /**
+     * @param value
+     * @return boolean
+     */
+    public boolean contains(Object value) {
+        return indexOf(value) != -1;
+    }
+
+    /**
+     * Pomocna metoda koja vraca node na zadanom indeksu.
+     * 
+     * @throws IndexOutOfBoundsException ako je indeks izvan raspona
+     * 
+     * @param index
+     * @return ListNode
+     */
     private ListNode getNode(int index) {
         if (!(0 <= index && index < size)) {
             throw new IndexOutOfBoundsException("Indeks je izvan raspona!");

@@ -1,83 +1,74 @@
 package hr.fer.oprpp1.custom.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
-public class ArrayIndexedCollectionTest {
+public class LinkedListIndexedCollectionTest {
+
     @Test
     public void testConstructors() {
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null));
-        assertThrows(IllegalArgumentException.class, () -> new ArrayIndexedCollection(-1));
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null, 1));
-        assertThrows(IllegalArgumentException.class,
-                () -> new ArrayIndexedCollection(new ArrayIndexedCollection(), -1));
+        assertThrows(NullPointerException.class, () -> new LinkedListIndexedCollection(null));
 
-        ArrayIndexedCollection col = new ArrayIndexedCollection();
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
         assertEquals(0, col.size());
 
-        col = new ArrayIndexedCollection(1);
+        col = new LinkedListIndexedCollection(new LinkedListIndexedCollection());
         assertEquals(0, col.size());
 
-        col = new ArrayIndexedCollection(new ArrayIndexedCollection());
-        assertEquals(0, col.size());
-
-        col = new ArrayIndexedCollection();
+        col = new LinkedListIndexedCollection();
         for (int i = 0; i < 32; i++) {
             col.add(i);
         }
 
-        ArrayIndexedCollection col2 = new ArrayIndexedCollection(col);
+        LinkedListIndexedCollection col2 = new LinkedListIndexedCollection(col);
         assertEquals(32, col2.size());
 
     }
 
-    // nisam koristio nasljedivanje/nesto takvo za slucaj da pokoji test treba
-    // dodatne provjere
-    // na kraju nisu trebali :(
-
     @Test
     public void testIsEmpty() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testIsEmpty();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testIsEmpty();
     }
 
     @Test
     public void testSize() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testSize();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testSize();
     }
 
     @Test
     public void testContains() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testContains();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testContains();
     }
 
     @Test
     public void testToArray() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testToArray();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testToArray();
     }
 
     @Test
     public void testForEach() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testForEach();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testForEach();
     }
 
     @Test
     public void testAddAll() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testAddAll();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testAddAll();
     }
 
     @Test
     public void testAdd() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testAdd();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testAdd();
     }
 
     @Test
     public void testClear() {
-        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testClear();
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testClear();
     }
 
     @Test
     public void testGet() {
-        ArrayIndexedCollection col = new ArrayIndexedCollection();
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
 
         assertThrows(IndexOutOfBoundsException.class, () -> col.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> col.get(0));
@@ -92,7 +83,7 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testInsert() {
-        ArrayIndexedCollection col = new ArrayIndexedCollection(2);
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
 
         assertThrows(IndexOutOfBoundsException.class, () -> col.insert("test1", 1));
         assertThrows(IndexOutOfBoundsException.class, () -> col.insert("test1", -1));
@@ -128,7 +119,7 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testIndexOf() {
-        ArrayIndexedCollection col = new ArrayIndexedCollection();
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
 
         assertEquals(-1, col.indexOf("test1"));
 
@@ -143,7 +134,7 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testRemoveValue() {
-        ArrayIndexedCollection col = new ArrayIndexedCollection();
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
 
         assertFalse(col.remove("test1"));
 
@@ -160,7 +151,7 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testRemoveIndex() {
-        ArrayIndexedCollection col = new ArrayIndexedCollection();
+        LinkedListIndexedCollection col = new LinkedListIndexedCollection();
 
         assertThrows(IndexOutOfBoundsException.class, () -> col.remove(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> col.remove(0));
@@ -170,11 +161,18 @@ public class ArrayIndexedCollectionTest {
 
         assertDoesNotThrow(() -> col.remove(1));
         assertEquals(1, col.size());
+
         assertEquals("test1", col.get(0));
 
         assertDoesNotThrow(() -> col.remove(0));
         assertEquals(0, col.size());
 
         assertThrows(IndexOutOfBoundsException.class, () -> col.remove(0));
+
+        col.add("test2");
+        col.add("test3");
+        col.add("test4");
+
+        assertDoesNotThrow(() -> col.remove(1));
     }
 }
