@@ -156,6 +156,12 @@ public class ArrayIndexedCollectionTest {
 
         assertTrue(col.remove("test2"));
         assertEquals(0, col.size());
+
+        col.add("test3");
+        col.add("test4");
+        col.add("test5");
+
+        assertTrue(col.remove("test4"));
     }
 
     @Test

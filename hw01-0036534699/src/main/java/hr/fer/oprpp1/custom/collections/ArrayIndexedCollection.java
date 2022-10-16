@@ -18,7 +18,9 @@ public class ArrayIndexedCollection extends Collection {
     }
 
     /**
-     * @return int
+     * Konstruktor s specificnim kapacitetom.
+     * 
+     * @param initialCapacity
      */
     public ArrayIndexedCollection(int initialCapacity) {
         if (initialCapacity < 1) {
@@ -187,6 +189,10 @@ public class ArrayIndexedCollection extends Collection {
 
         elements[size - 1] = null;
         --size;
+
+        if (size < elements.length / 2 - 1) {
+            shrinkInHalf();
+        }
     }
 
     /**
@@ -215,6 +221,7 @@ public class ArrayIndexedCollection extends Collection {
         }
 
         remove(index);
+
         return true;
     }
 
@@ -253,6 +260,21 @@ public class ArrayIndexedCollection extends Collection {
         Object[] newArray = new Object[elements.length * 2];
 
         for (int i = 0; i < elements.length; i++) {
+            newArray[i] = elements[i];
+        }
+
+        elements = newArray;
+    }
+
+    /**
+     * Smanjuje elements kada imamo previše mjesta.
+     * 
+     * Ne provjerava koristimo li drugu polovinu!
+     */
+    private void shrinkInHalf() {
+        Object[] newArray = new Object[elements.length / 2];
+
+        for (int i = 0; i < size; i++) {
             newArray[i] = elements[i];
         }
 
