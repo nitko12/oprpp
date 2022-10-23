@@ -4,19 +4,13 @@ package hr.fer.oprpp1.custom.collections;
  * Apstraktna kolekcija koja sadrži metode koje su zajedničke svim kolekcijama,
  * no nisu jednako implementirane.
  */
-public class Collection {
-    /**
-     * Default konstruktor.
-     */
-    protected Collection() {
-    }
-
+public interface Collection {
     /**
      * Vraća true ako je kolekcija prazna, inače vraća false.
      * 
      * @return boolean
      */
-    public boolean isEmpty() {
+    public default boolean isEmpty() {
         return size() == 0;
     }
 
@@ -25,17 +19,14 @@ public class Collection {
      * 
      * @return int
      */
-    public int size() {
-        return 0;
-    }
+    public int size();
 
     /**
      * Dodaje element u kolekciju.
      * 
      * @param value
      */
-    public void add(Object value) {
-    }
+    public void add(Object value);
 
     /**
      * Vraća true ako kolekcija sadrži element value, inače false.
@@ -43,9 +34,7 @@ public class Collection {
      * @param value
      * @return boolean
      */
-    public boolean contains(Object value) {
-        return false;
-    }
+    public boolean contains(Object value);
 
     /**
      * Briše prvi element value iz kolekcije.
@@ -53,9 +42,7 @@ public class Collection {
      * @param value
      * @return boolean
      */
-    public boolean remove(Object value) {
-        return false;
-    }
+    public boolean remove(Object value);
 
     /**
      * Pretvara kolekciju u polje.
@@ -63,24 +50,21 @@ public class Collection {
      * 
      * @return Object[]
      */
-    public Object[] toArray() {
-        throw new UnsupportedOperationException();
-    }
+    public Object[] toArray();
 
     /**
      * Procesira svaki element kolekcije metodom process u processor klasi.
      * 
      * @param processor
      */
-    public void forEach(Processor processor) {
-    }
+    public void forEach(Processor processor);
 
     /**
      * Dodaje sve elemente iz kolekcije other u kolekciju.
      * 
      * @param other
      */
-    public void addAll(Collection other) {
+    public default void addAll(Collection other) {
         class LocalProcessor extends Processor {
             @Override
             public void process(Object value) {
@@ -95,7 +79,6 @@ public class Collection {
     /**
      * Briše sve elemente iz kolekcije.
      */
-    public void clear() {
-    }
+    public void clear();
 
 }

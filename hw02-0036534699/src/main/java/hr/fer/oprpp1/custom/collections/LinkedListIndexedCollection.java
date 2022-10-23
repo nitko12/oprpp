@@ -3,7 +3,7 @@ package hr.fer.oprpp1.custom.collections;
 /**
  * Implementacija duplo povezane liste.
  */
-public class LinkedListIndexedCollection extends Collection {
+public class LinkedListIndexedCollection implements Collection {
     private static class ListNode {
         ListNode prev, next;
 
