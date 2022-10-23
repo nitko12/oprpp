@@ -1,6 +1,4 @@
-package hr.fer.oprpp1.prob1;
-
-import hr.fer.oprpp1.LexerState;
+package hr.fer.oprpp1.hw02.prob1;
 
 public class Lexer {
 

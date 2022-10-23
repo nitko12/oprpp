@@ -1,8 +1,8 @@
-package hr.fer.oprpp1.prob1.demo;
+package hr.fer.oprpp1.hw02.prob1.demo;
 
-import hr.fer.oprpp1.prob1.Lexer;
-import hr.fer.oprpp1.prob1.Token;
-import hr.fer.oprpp1.prob1.TokenType;
+import hr.fer.oprpp1.hw02.prob1.Lexer;
+import hr.fer.oprpp1.hw02.prob1.Token;
+import hr.fer.oprpp1.hw02.prob1.TokenType;
 
 public class LexerDemo {
     public static void main(String[] args) {

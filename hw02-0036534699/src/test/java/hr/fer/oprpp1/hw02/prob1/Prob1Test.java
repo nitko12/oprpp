@@ -1,31 +1,32 @@
-package hr.fer.oprpp1.prob1;
+package hr.fer.oprpp1.hw02.prob1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.Test;
 
-import hr.fer.oprpp1.LexerState;
-
-import org.junit.jupiter.api.Disabled;
+// import hr.fer.oprpp1.hw02.prob1.Lexer;
+// import hr.fer.oprpp1.hw02.prob1.LexerException;
+// import hr.fer.oprpp1.hw02.prob1.LexerState;
+// import hr.fer.oprpp1.hw02.prob1.Token;
+// import hr.fer.oprpp1.hw02.prob1.TokenType;
 
 public class Prob1Test {
 
-    private String readExample(int n) {
-        try (InputStream is = this.getClass().getClassLoader().getResourceAsStream("extra/primjer" + n + ".txt")) {
-            if (is == null)
-                throw new RuntimeException("Datoteka extra/primjer" + n + ".txt je nedostupna.");
-            byte[] data = is.readAllBytes();
-            String text = new String(data, StandardCharsets.UTF_8);
-            return text;
-        } catch (IOException ex) {
-            throw new RuntimeException("Greška pri čitanju datoteke.", ex);
-        }
+    // private String readExample(int n) {
+    // try (InputStream is =
+    // this.getClass().getClassLoader().getResourceAsStream("extra/primjer" + n +
+    // ".txt")) {
+    // if (is == null)
+    // throw new RuntimeException("Datoteka extra/primjer" + n + ".txt je
+    // nedostupna.");
+    // byte[] data = is.readAllBytes();
+    // String text = new String(data, StandardCharsets.UTF_8);
+    // return text;
+    // } catch (IOException ex) {
+    // throw new RuntimeException("Greška pri čitanju datoteke.", ex);
+    // }
 
-    }
+    // }
 
     // @Disabled
     @Test
