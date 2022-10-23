@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import hr.fer.oprpp1.custom.collections.Tester;
 
-public class TesterDemo {
+public class TesterDemoTest {
     @Test
     public void test() {
         class EvenIntegerTester implements Tester {
