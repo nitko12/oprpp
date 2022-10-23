@@ -1,9 +1,12 @@
 package hr.fer.oprpp1.custom.collections;
 
+import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
+
 /**
  * Implementacija duplo povezane liste.
  */
-public class LinkedListIndexedCollection implements Collection {
+public class LinkedListIndexedCollection implements List {
     private static class ListNode {
         ListNode prev, next;
 
@@ -12,6 +15,8 @@ public class LinkedListIndexedCollection implements Collection {
 
     private int size;
     private ListNode first, last;
+
+    private long modificationCount;
 
     public LinkedListIndexedCollection() {
         first = null;
@@ -59,6 +64,7 @@ public class LinkedListIndexedCollection implements Collection {
         }
 
         ++size;
+        ++modificationCount;
     }
 
     /**
@@ -77,6 +83,7 @@ public class LinkedListIndexedCollection implements Collection {
         first = null;
         last = null;
         size = 0;
+        ++modificationCount;
     }
 
     /**
@@ -123,6 +130,7 @@ public class LinkedListIndexedCollection implements Collection {
         }
 
         ++size;
+        ++modificationCount;
     }
 
     /**
@@ -173,6 +181,7 @@ public class LinkedListIndexedCollection implements Collection {
         }
 
         --size;
+        ++modificationCount;
     }
 
     /**
@@ -217,21 +226,6 @@ public class LinkedListIndexedCollection implements Collection {
     }
 
     /**
-     * Procesira svaki element kolekcije metodom process u processor klasi.
-     * 
-     * @param processor
-     */
-    public void forEach(Processor processor) {
-        ListNode node = first;
-
-        while (node != null) {
-            processor.process(node.val);
-
-            node = node.next;
-        }
-    }
-
-    /**
      * @param value
      * @return boolean
      */
@@ -268,5 +262,79 @@ public class LinkedListIndexedCollection implements Collection {
         }
 
         return node;
+    }
+
+    public ElementsGetter createElementsGetter() {
+        return new LinkedListIndexedCollectionElementsGetter(this);
+    }
+
+    /**
+     * Klasa koja implementira sucelje ElementsGetter za ovu kolekciju.
+     *
+     * Paziti da se ne koristi dok se mjenja kolekcija.
+     */
+    private static class LinkedListIndexedCollectionElementsGetter implements ElementsGetter {
+
+        private LinkedListIndexedCollection collection;
+        private ListNode runner;
+        private long savedModificationCount = 0;
+
+        /*
+         * Konstruktor.
+         */
+        public LinkedListIndexedCollectionElementsGetter(LinkedListIndexedCollection collection) {
+            // Ne moze se testirati
+            // if (first == null) {
+            // throw new NullPointerException("Element liste ne smije biti null!");
+            // }
+
+            runner = collection.first;
+            savedModificationCount = collection.modificationCount;
+            this.collection = collection;
+        }
+
+        /*
+         * Vraca true ako ima jos objekata, inace false.
+         * 
+         * @return boolean
+         */
+        @Override
+        public boolean hasNextElement() {
+            checkModification();
+
+            return runner != null;
+        }
+
+        /*
+         * Vraca sljedeci element.
+         * 
+         * @throws NoSuchElementException ako nema vise elemenata
+         * 
+         * @return Object
+         */
+        @Override
+        public Object getNextElement() {
+            if (runner == null) {
+                throw new NoSuchElementException("Kraj kolekcije!");
+            }
+
+            checkModification();
+
+            ListNode t = runner;
+            runner = runner.next;
+
+            return t.val;
+        }
+
+        /*
+         * Provjerava uvjet da se kolekcija ne smije mjenjati.
+         * 
+         * @throws ConcurrentModificationException ako je kolekcija mijenjana
+         */
+        private void checkModification() {
+            if (savedModificationCount != collection.modificationCount) {
+                throw new ConcurrentModificationException("Elements getter ne dopusta promjenu kolekcije!");
+            }
+        }
     }
 }

@@ -61,6 +61,8 @@ public class ObjectStackTest {
     public void testPeek() {
         ObjectStack stack = new ObjectStack();
 
+        assertThrows(EmptyStackException.class, () -> stack.peek());
+
         stack.push("test1");
 
         assertEquals("test1", stack.peek());

@@ -1,6 +1,9 @@
 package hr.fer.oprpp1.custom.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.Test;
 
 public class ArrayIndexedCollectionTest {
@@ -182,5 +185,10 @@ public class ArrayIndexedCollectionTest {
         assertEquals(0, col.size());
 
         assertThrows(IndexOutOfBoundsException.class, () -> col.remove(0));
+    }
+
+    @Test
+    public void testElementsGetter() {
+        new CollectionCommonTests<ArrayIndexedCollection>(ArrayIndexedCollection::new).testElementsGetter();
     }
 }

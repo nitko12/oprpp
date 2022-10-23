@@ -175,4 +175,9 @@ public class LinkedListIndexedCollectionTest {
 
         assertDoesNotThrow(() -> col.remove(1));
     }
+
+    @Test
+    public void testElementsGetter() {
+        new CollectionCommonTests<LinkedListIndexedCollection>(LinkedListIndexedCollection::new).testElementsGetter();
+    }
 }

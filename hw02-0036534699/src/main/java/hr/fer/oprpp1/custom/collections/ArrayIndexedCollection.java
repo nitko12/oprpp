@@ -1,12 +1,16 @@
 package hr.fer.oprpp1.custom.collections;
 
+import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
+
 /**
  * Implementacija kolekcije koja se temelji na polju.
  */
-public class ArrayIndexedCollection implements Collection {
+public class ArrayIndexedCollection implements List {
 
     public static final int DEFAULT_CAPACITY = 16;
     private int size;
+    private int modificationCount = 0;
 
     private Object[] elements;
 
@@ -98,6 +102,7 @@ public class ArrayIndexedCollection implements Collection {
         }
 
         size = 0;
+        ++modificationCount;
     }
 
     /**
@@ -147,6 +152,7 @@ public class ArrayIndexedCollection implements Collection {
 
         elements[position] = value;
         ++size;
+        ++modificationCount;
     }
 
     /**
@@ -189,6 +195,7 @@ public class ArrayIndexedCollection implements Collection {
 
         elements[size - 1] = null;
         --size;
+        ++modificationCount;
 
         if (size < elements.length / 2 - 1) {
             shrinkInHalf();
@@ -242,18 +249,6 @@ public class ArrayIndexedCollection implements Collection {
     }
 
     /**
-     * Obrađuje sve elemente kolekcije process funkcijom u klasi processor.
-     * 
-     * @param processor
-     */
-    @Override
-    public void forEach(Processor processor) {
-        for (int i = 0; i < size; i++) {
-            processor.process(elements[i]);
-        }
-    }
-
-    /**
      * Povećava kapacitet polja za duplo.
      */
     private void doubleArraySize() {
@@ -279,5 +274,81 @@ public class ArrayIndexedCollection implements Collection {
         }
 
         elements = newArray;
+    }
+
+    /**
+     * Vraca MyElementsGetter koji dohvaca elemente iz kolekcije.
+     * 
+     * @return MyElementsGetter
+     */
+    public ArrayIndexedColletionElementsGetter createElementsGetter() {
+        return new ArrayIndexedColletionElementsGetter(this);
+    }
+
+    /**
+     * Klasa koja implementira ElementsGetter za ovu klasu.
+     * 
+     * Paziti da se ne koristi dok se mjenja kolekcija.
+     */
+    private static class ArrayIndexedColletionElementsGetter implements ElementsGetter {
+        private int idx = 0;
+        private final ArrayIndexedCollection collection;
+        private long savedModificationCount = 0;
+
+        /**
+         * Konstruktor, prima referencu na klasu s kojom se koristi.
+         * 
+         * @param collection
+         */
+        public ArrayIndexedColletionElementsGetter(ArrayIndexedCollection collection) {
+            // Ne moze se testirati
+            // if (collection == null) {
+            // throw new NullPointerException("Kolekcija ne smije biti null!");
+            // }
+
+            this.collection = collection;
+            savedModificationCount = collection.modificationCount;
+        }
+
+        /**
+         * Vraca true ako ima jos elemenata u kolekciji, inace false.
+         * 
+         * @return boolean
+         */
+        @Override
+        public boolean hasNextElement() {
+            checkModification();
+
+            return idx < collection.size;
+        }
+
+        /**
+         * Vraca sljedeci element u kolekciji.
+         * 
+         * @throws NoSuchElementException ako nema vise elemenata u kolekciji.
+         * 
+         * @return Object
+         */
+        @Override
+        public Object getNextElement() {
+            if (!hasNextElement()) {
+                throw new NoSuchElementException("Kraj kolekcije!");
+            }
+
+            checkModification();
+
+            return collection.elements[idx++];
+        }
+
+        /**
+         * Provjerava uvjet da se kolekcija ne smije mjenjati.
+         * 
+         * @throws ConcurrentModificationException ako je kolekcija mijenjana
+         */
+        private void checkModification() {
+            if (savedModificationCount != collection.modificationCount) {
+                throw new ConcurrentModificationException("Elements getter ne dopusta promjenu kolekcije!");
+            }
+        }
     }
 }

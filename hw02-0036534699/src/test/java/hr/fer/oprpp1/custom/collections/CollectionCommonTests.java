@@ -2,6 +2,8 @@ package hr.fer.oprpp1.custom.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 public class CollectionCommonTests<T extends Collection> {
@@ -126,4 +128,59 @@ public class CollectionCommonTests<T extends Collection> {
         assertEquals(0, col.size());
     }
 
+    public void testElementsGetter() {
+        Collection col = factory.get();
+
+        col.add("Ana");
+        col.add("Jasna");
+
+        final ElementsGetter getter = col.createElementsGetter();
+
+        assertTrue(getter.hasNextElement());
+        assertEquals("Ana", getter.getNextElement());
+
+        assertTrue(getter.hasNextElement());
+        assertEquals("Jasna", getter.getNextElement());
+
+        assertFalse(getter.hasNextElement());
+        assertThrows(NoSuchElementException.class, () -> getter.getNextElement());
+
+        col.add("Ana");
+
+        final ElementsGetter getter2 = col.createElementsGetter();
+        assertTrue(getter2.hasNextElement());
+
+        col.add("Jasna");
+        assertThrows(ConcurrentModificationException.class, () -> getter2.getNextElement());
+
+        final ElementsGetter getter3 = col.createElementsGetter();
+
+        assertTrue(getter3.hasNextElement());
+
+        col.clear();
+        assertThrows(ConcurrentModificationException.class, () -> getter3.getNextElement());
+
+        col.add("Josip");
+        col.add("Josip2");
+
+        final ElementsGetter getter4 = col.createElementsGetter();
+        class LocalProcessor implements Processor {
+            private String s = "";
+
+            @Override
+            public void process(Object value) {
+                s += value;
+            }
+
+            public String getOut() {
+                return s;
+            }
+        }
+
+        LocalProcessor processor = new LocalProcessor();
+
+        assertDoesNotThrow(() -> getter4.processRemaining(processor));
+
+        assertEquals("JosipJosip2", processor.getOut());
+    }
 }

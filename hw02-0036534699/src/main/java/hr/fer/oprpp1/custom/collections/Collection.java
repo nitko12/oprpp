@@ -57,7 +57,12 @@ public interface Collection {
      * 
      * @param processor
      */
-    public void forEach(Processor processor);
+    public default void forEach(Processor processor) {
+        ElementsGetter getter = createElementsGetter();
+        while (getter.hasNextElement()) {
+            processor.process(getter.getNextElement());
+        }
+    }
 
     /**
      * Dodaje sve elemente iz kolekcije other u kolekciju.
@@ -81,4 +86,29 @@ public interface Collection {
      */
     public void clear();
 
+    /**
+     * Vraća objekt koji implementira ElementsGetter.
+     * 
+     * @return ElementsGetter
+     */
+    public ElementsGetter createElementsGetter();
+
+    /**
+     * Dodaje sve objekte iz col koji zadovoljavaju uvjet predan u testeru u
+     * kolekciju.
+     * 
+     * @param col
+     * @param tester
+     */
+    public default void addAllSatisfying(Collection col, Tester tester) {
+        ElementsGetter getter = col.createElementsGetter();
+
+        while (getter.hasNextElement()) {
+            Object element = getter.getNextElement();
+
+            if (tester.test(element)) {
+                add(element);
+            }
+        }
+    }
 }

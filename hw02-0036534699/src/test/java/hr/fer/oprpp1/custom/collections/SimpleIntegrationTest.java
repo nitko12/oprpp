@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-public class SimpleIntegration {
+public class SimpleIntegrationTest {
     @Test
     public void assigmentSampleTest() {
         ArrayIndexedCollection col = new ArrayIndexedCollection(2);
@@ -54,6 +54,36 @@ public class SimpleIntegration {
 
         col.remove(Integer.valueOf(20));
         assertEquals(2, col.size());
+
+    }
+
+    @Test
+    public void assigmentSampleTest2() {
+        Collection col1 = new LinkedListIndexedCollection();
+        Collection col2 = new ArrayIndexedCollection();
+
+        col1.add(2);
+        col1.add(3);
+        col1.add(4);
+        col1.add(5);
+        col1.add(6);
+        col1.add("string");
+        col1.add(8);
+        col2.add(12);
+
+        class EvenIntegerTester implements Tester {
+            @Override
+            public boolean test(Object obj) {
+                if (!(obj instanceof Integer))
+                    return false;
+                return (int) obj % 2 == 0;
+            }
+        }
+
+        col2.addAllSatisfying(col1, new EvenIntegerTester());
+        // col2.forEach(System.out::println);
+
+        assertArrayEquals(new Object[] { 12, 2, 4, 6, 8 }, col2.toArray());
 
     }
 }
