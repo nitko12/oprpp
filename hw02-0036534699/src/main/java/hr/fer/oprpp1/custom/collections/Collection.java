@@ -65,7 +65,7 @@ public interface Collection {
      * @param other
      */
     public default void addAll(Collection other) {
-        class LocalProcessor extends Processor {
+        class LocalProcessor implements Processor {
             @Override
             public void process(Object value) {
                 add(value);

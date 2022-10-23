@@ -1,13 +1,11 @@
 package hr.fer.oprpp1.custom.collections;
 
-public class Processor {
+public interface Processor {
 
     /**
      * Obrada elementa.
      * 
      * @param value
      */
-    public void process(Object value) {
-
-    }
+    public void process(Object value);
 }

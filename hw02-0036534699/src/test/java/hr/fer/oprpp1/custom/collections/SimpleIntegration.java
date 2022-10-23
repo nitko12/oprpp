@@ -25,7 +25,7 @@ public class SimpleIntegration {
 
         LinkedListIndexedCollection col2 = new LinkedListIndexedCollection(col);
 
-        class P extends Processor {
+        class P implements Processor {
 
             private String s = "";
 

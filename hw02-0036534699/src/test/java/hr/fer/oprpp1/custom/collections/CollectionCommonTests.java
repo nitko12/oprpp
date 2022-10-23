@@ -58,7 +58,7 @@ public class CollectionCommonTests<T extends Collection> {
     public void testForEach() {
         T col = factory.get();
 
-        class SumProcessor extends Processor {
+        class SumProcessor implements Processor {
             int sum = 0;
 
             @Override
