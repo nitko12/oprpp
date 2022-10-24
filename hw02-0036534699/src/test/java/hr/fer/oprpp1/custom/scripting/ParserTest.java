@@ -3,6 +3,8 @@ package hr.fer.oprpp1.custom.scripting;
 import hr.fer.oprpp1.custom.scripting.nodes.DocumentNode;
 import hr.fer.oprpp1.custom.scripting.nodes.TextNode;
 import hr.fer.oprpp1.custom.scripting.parser.SmartScriptParser;
+import hr.fer.oprpp1.custom.scripting.parser.SmartScriptParserException;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,5 +72,23 @@ public class ParserTest {
         DocumentNode d = parser.getDocumentNode();
 
         assertEquals(5, d.numberOfChildren());
+    }
+
+    @Test
+    public void testExceptions() {
+        assertThrows(SmartScriptParserException.class,
+                () -> new SmartScriptParser("{$abc$}"));
+
+        assertThrows(SmartScriptParserException.class,
+                () -> new SmartScriptParser("{$ {$"));
+
+        assertThrows(SmartScriptParserException.class,
+                () -> new SmartScriptParser("{$ FOR i 1.0 -1 1 $}"));
+
+        assertThrows(SmartScriptParserException.class,
+                () -> new SmartScriptParser("{$="));
+
+        assertThrows(SmartScriptParserException.class,
+                () -> new SmartScriptParser("{$"));
     }
 }

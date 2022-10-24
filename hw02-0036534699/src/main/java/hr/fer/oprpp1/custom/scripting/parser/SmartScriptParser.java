@@ -28,9 +28,8 @@ public class SmartScriptParser {
     public SmartScriptParser(String documentBody) {
         data = documentBody.toCharArray();
 
-        lexer = new Lexer(data);
-
         try {
+            lexer = new Lexer(data);
             parse();
         } catch (Exception e) {
             throw new SmartScriptParserException("Error while parsing. - " + e.getMessage());
@@ -173,6 +172,6 @@ public class SmartScriptParser {
             return new ElementFunction((String) t.getValue());
         else if (t.getType() == TokenEnum.OPERATOR)
             return new ElementOperator("" + t.getValue());
-        return null;
+        throw new SmartScriptParserException("Nepoznati element.");
     }
 }

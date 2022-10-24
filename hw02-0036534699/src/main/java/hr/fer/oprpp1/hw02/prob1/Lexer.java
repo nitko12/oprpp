@@ -1,5 +1,8 @@
 package hr.fer.oprpp1.hw02.prob1;
 
+/*
+ * Lexer u drugom djelu zadace.
+ */
 public class Lexer {
 
     private char[] data;
@@ -8,6 +11,11 @@ public class Lexer {
 
     private LexerState state = LexerState.BASIC;
 
+    /*
+     * Konstruktor koji prima ulaz.
+     * 
+     * @param text ulaz
+     */
     public Lexer(String text) {
         if (text == null) {
             throw new NullPointerException("Text ne smije biti null!");
@@ -17,6 +25,13 @@ public class Lexer {
         currentIndex = 0;
     }
 
+    /*
+     * Metoda koja vraca sljedeci token.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @return token
+     */
     public Token nextToken() {
         if (token != null && token.getType() == TokenType.EOF) {
             throw new LexerException("Dosao do kraja ranije!");
@@ -34,8 +49,13 @@ public class Lexer {
         }
     }
 
-    // generira i vraća sljedeći token
-    // baca LexerException ako dođe do pogreške
+    /*
+     * Metoda koja vraca sljedeci token u basic stanju.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @return token
+     */
     public Token nextTokenBasic() {
         if (skipWhitespaces())
             return token = new Token(TokenType.EOF, null);
@@ -59,6 +79,13 @@ public class Lexer {
         throw new LexerException("Nepoznati znak!");
     }
 
+    /*
+     * Metoda koja vraca sljedeci token u extended stanju.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @return token
+     */
     public Token nextTokenExtended() {
         if (skipWhitespaces())
             return token = new Token(TokenType.EOF, null);
@@ -76,12 +103,18 @@ public class Lexer {
         return token = new Token(TokenType.WORD, sb.toString());
     }
 
-    // vraća zadnji generirani token; može se pozivati
-    // više puta; ne pokreće generiranje sljedećeg tokena
+    /*
+     * Metoda koja vraca zadnji generirani token.
+     * 
+     * @return token
+     */
     public Token getToken() {
         return token;
     }
 
+    /*
+     * Metoda koja postavlja stanje lexera.
+     */
     public void setState(LexerState state) {
         if (state == null) {
             throw new NullPointerException("State ne smije biti null!");
@@ -90,6 +123,9 @@ public class Lexer {
         this.state = state;
     }
 
+    /*
+     * Metoda koja preskače sve whitespace znakove.
+     */
     private boolean skipWhitespaces() {
         while (currentIndex < data.length && Character.isWhitespace(data[currentIndex])) {
             currentIndex++;
@@ -98,6 +134,9 @@ public class Lexer {
         return currentIndex == data.length;
     }
 
+    /*
+     * Metoda koja provjerava je li sljedeći znak simbol.
+     */
     private boolean isSymbol(char c) {
         if (c == '-')
             return true;
@@ -117,10 +156,20 @@ public class Lexer {
         return false;
     }
 
+    /*
+     * Metoda za dohcat sljedeceg simbola.
+     */
     private char getNextSymbol() {
         return data[currentIndex++];
     }
 
+    /*
+     * Metoda za dohvat sljedece rijeci.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @return String rijec
+     */
     private String getNextWord() {
         StringBuilder sb = new StringBuilder();
 
@@ -155,6 +204,13 @@ public class Lexer {
 
     }
 
+    /*
+     * Metoda za dohvat sljedeceg broja.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @return long broj
+     */
     private long getNextNumber() {
         StringBuilder sb = new StringBuilder();
 
@@ -165,12 +221,18 @@ public class Lexer {
         return Long.parseLong(sb.toString());
     }
 
+    /*
+     * Metoda koja provjerava je li sljedeći znak escapean broj.
+     */
     private boolean isNextEscapedNum() {
         return (data[currentIndex] == '\\') &&
                 (currentIndex + 1 < data.length) &&
                 Character.isDigit(data[currentIndex + 1]);
     }
 
+    /*
+     * Metoda koja provjerava je li sljedeći znak escapean backslash.
+     */
     private boolean isNextEscapedBackslash() {
         return (data[currentIndex] == '\\') &&
                 (currentIndex + 1 < data.length) &&

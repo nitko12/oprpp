@@ -27,7 +27,7 @@ public class LexerTest {
 
     @Test
     public void testInTag() {
-        String data = "{$ FOR i 1 10 1 $}";
+        String data = "{$ FOR i -1 10 1 $}";
 
         Lexer lexer = new Lexer(data.toCharArray());
 
@@ -42,7 +42,7 @@ public class LexerTest {
         assertEquals("i", lexer.getToken().getValue());
 
         assertEquals(TokenEnum.INT, lexer.getNextToken().getType());
-        assertEquals(1, lexer.getToken().getValue());
+        assertEquals(-1, lexer.getToken().getValue());
 
         assertEquals(TokenEnum.INT, lexer.getNextToken().getType());
         assertEquals(10, lexer.getToken().getValue());

@@ -1,5 +1,10 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * Dohvaća elemente iz kolekcije.
+ * 
+ * 
+ */
 public interface ElementsGetter {
 
     /**

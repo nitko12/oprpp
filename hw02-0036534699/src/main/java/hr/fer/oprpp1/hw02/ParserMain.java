@@ -13,7 +13,7 @@ public class ParserMain {
 
     public static void main(String[] args) {
 
-        String filepath = "/Users/nitkonitkic/Documents/oprpp/hw02-0036534699/src/test/resources/extra/primjer9.txt";
+        String filepath = "PATH";
 
         String docBody;
         try {

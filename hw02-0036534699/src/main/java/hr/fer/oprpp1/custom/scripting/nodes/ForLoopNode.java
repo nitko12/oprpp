@@ -3,12 +3,18 @@ package hr.fer.oprpp1.custom.scripting.nodes;
 import hr.fer.oprpp1.custom.scripting.elems.Element;
 import hr.fer.oprpp1.custom.scripting.elems.ElementVariable;
 
+/*
+ * Klasa for petlja nodea.
+ */
 public class ForLoopNode extends Node {
     ElementVariable variable;
     Element startExpression;
     Element endExpression;
     Element stepExpression;
 
+    /*
+     * Konstruktor koji prima varijablu, početnu, završnu i korak.
+     */
     public ForLoopNode(ElementVariable variable,
             Element startExpression,
             Element endExpression,
@@ -30,6 +36,9 @@ public class ForLoopNode extends Node {
         this.stepExpression = stepExpression;
     }
 
+    /*
+     * Metoda za ispis.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

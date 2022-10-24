@@ -1,5 +1,8 @@
 package hr.fer.oprpp1.custom.scripting.lexer;
 
+/*
+ * Klasa koja obavlja leksičku analizu nad jezikom SmartScript.
+ */
 public class Lexer {
     private final char[] data;
     private int currentIndex;
@@ -8,18 +11,38 @@ public class Lexer {
 
     private LexerStateEnum state = LexerStateEnum.NORMAL;
 
+    /*
+     * Konstruktor koji prima ulazni tekst.
+     * 
+     * @param text ulaz
+     */
     public Lexer(char[] data) {
         this.data = data;
     }
 
+    /*
+     * Metoda koja postalja stanje leksičkog analizatora.
+     * 
+     * @param st stanje
+     */
     public void setState(LexerStateEnum st) {
         state = st;
     }
 
+    /*
+     * Metoda koja vraća prosli ocitani token.
+     * 
+     * @returns token
+     */
     public Token getToken() {
         return token;
     }
 
+    /*
+     * Metoda koja vraca sljedeci token.
+     * 
+     * @throws LexerException ako je doslo do greske
+     */
     public Token getNextToken() {
         if (token != null && token.getType() == TokenEnum.EOF) {
             throw new LexerException("No more tokens available.");
@@ -37,6 +60,13 @@ public class Lexer {
         return getNextTokenNormal();
     }
 
+    /*
+     * Metoda koja vraca sljedeci token u normalnom stanju.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @returns token
+     */
     private Token getNextTokenNormal() {
 
         if (data[currentIndex] == '{') {
@@ -97,6 +127,13 @@ public class Lexer {
         return token;
     }
 
+    /*
+     * Metoda koja peeka iduci token bez da ga uzme.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @returns token
+     */
     public Token peekNextToken() {
         int lastIndex = currentIndex;
 
@@ -107,6 +144,13 @@ public class Lexer {
         return token;
     }
 
+    /*
+     * Metoda koja vraca sljedeci token u stanju u tagu.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @returns token
+     */
     private Token getNextTokenInTag() {
         skipWhitespace();
 
@@ -124,7 +168,10 @@ public class Lexer {
             return token;
         }
 
-        if (Character.isDigit(data[currentIndex]) || data[currentIndex] == '-') {
+        if (Character.isDigit(data[currentIndex])
+                || (data[currentIndex] == '-' &&
+                        currentIndex + 1 < data.length &&
+                        Character.isDigit(data[currentIndex + 1]))) {
             String next = getNextNumber();
 
             if (next.contains(".")) {
@@ -177,6 +224,10 @@ public class Lexer {
         throw new LexerException("Nepoznati token.");
     }
 
+    /*
+     * Metoda koja preskace whitespace.
+     * 
+     */
     private void skipWhitespace() {
         while (currentIndex < data.length &&
                 Character.isWhitespace(data[currentIndex])) {
@@ -184,10 +235,24 @@ public class Lexer {
         }
     }
 
+    /*
+     * Provjerava je li operator.
+     * 
+     * @param operator operator
+     * 
+     * @returns true ako je operator, false inace
+     */
     private boolean isOperator(String s) {
         return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/") || s.equals("^");
     }
 
+    /*
+     * Metoda koja vraca sljedeci string.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @returns String
+     */
     private String getNextString() {
         StringBuilder sb = new StringBuilder();
 
@@ -207,7 +272,7 @@ public class Lexer {
                     currentIndex += 2;
                     continue;
                 }
-                throw new LexerException("Ilegalan escape.");
+                throw new LexerException("Ilegalan escape u stringu.");
             }
 
             if (c == '"') {
@@ -224,6 +289,13 @@ public class Lexer {
         return sb.toString();
     }
 
+    /*
+     * Metoda koja vraca sljedeci broj.
+     * 
+     * @throws LexerException ako je doslo do greske
+     * 
+     * @returns String
+     */
     private String getNextNumber() {
         StringBuilder sb = new StringBuilder();
 
