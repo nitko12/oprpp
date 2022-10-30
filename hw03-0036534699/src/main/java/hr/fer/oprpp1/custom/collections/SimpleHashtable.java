@@ -1,6 +1,7 @@
 package hr.fer.oprpp1.custom.collections;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -33,6 +34,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     private int size;
     private int capacity;
+    private int lastModificationCount = 0;
 
     private TableEntry<K, V>[] table;
 
@@ -69,7 +71,8 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         if (slot == null) {
             table[idx] = new TableEntry<>(key, value);
-            size++;
+            ++size;
+            ++lastModificationCount;
             return null;
         }
 
@@ -85,7 +88,8 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
 
         last.next = new TableEntry<>(key, value);
-        size++;
+        ++size;
+        ++lastModificationCount;
 
         return null;
 
@@ -166,7 +170,8 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         if (slot.getKey().equals(key)) {
             table[idx] = slot.next;
-            size--;
+            --size;
+            ++lastModificationCount;
             return slot.getValue();
         }
 
@@ -174,7 +179,8 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             if (slot.next.getKey().equals(key)) {
                 V oldValue = slot.next.getValue();
                 slot.next = slot.next.next;
-                size--;
+                --size;
+                ++lastModificationCount;
                 return oldValue;
             }
             slot = slot.next;
@@ -254,71 +260,80 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
 
         size = 0;
+        ++lastModificationCount;
     }
 
     private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
         int i = 0;
-        int j = 0;
+        int modificationCount = lastModificationCount;
         TableEntry<K, V> current = null;
 
-        public IteratorImpl() {
-            while (j < table.length && table[j] == null) {
-                j++;
-            }
-            current = table[j];
-        }
+        boolean lastRemoved = false;
 
         @Override
         public boolean hasNext() {
-            if (i < size) {
+
+            if (current != null && current.next != null) {
                 return true;
+            }
+
+            checkModification();
+
+            for (int k = i; k < capacity; k++) {
+                if (table[k] != null) {
+                    return true;
+                }
             }
 
             return false;
         }
 
         @Override
-        public SimpleHashtable.TableEntry<K, V> next() {
-            if (!hasNext() || current == null) {
-                throw new NoSuchElementException("Nema vise elemenata u tablici!");
+        public TableEntry<K, V> next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("Nema vise objekata!");
             }
 
-            TableEntry<K, V> next = current;
-            stepCurrent();
+            checkModification();
 
-            ++i;
-            return next;
+            lastRemoved = false;
+
+            if (current != null && current.next != null) {
+                current = current.next;
+                return current;
+            }
+
+            for (int k = i; k < capacity; k++) {
+                if (table[k] != null) {
+                    current = table[k];
+                    i = k + 1;
+                    return current;
+                }
+            }
+
+            throw new NoSuchElementException("Nema vise objekata!");
         }
 
         @Override
         public void remove() {
-            if (current == null) {
-                throw new IllegalStateException("Nema trenutnog elementa!");
+            if (lastRemoved) {
+                throw new IllegalStateException("Nije moguce ponovno obrisati isti objekt!");
             }
 
-            if (current.next == null) {
-                table[j] = null;
-                stepCurrent();
-            } else {
-                current.setValue(current.next.getValue());
-                current.key = current.next.key;
-                current.next = current.next.next;
+            if (current == null) {
+                throw new IllegalStateException("Nije moguce obrisati objekt!");
             }
+
+            checkModification();
+
+            SimpleHashtable.this.remove(current.getKey());
+            this.modificationCount = lastModificationCount;
+            lastRemoved = true;
         }
 
-        private void stepCurrent() {
-            if (current.next != null) {
-                current = current.next;
-            } else {
-                j++;
-                while (j < table.length && table[j] == null) {
-                    j++;
-                }
-                if (j < table.length) {
-                    current = table[j];
-                } else {
-                    current = null;
-                }
+        private void checkModification() {
+            if (modificationCount != lastModificationCount) {
+                throw new ConcurrentModificationException("Tablica promjenjena izvana!");
             }
         }
     }

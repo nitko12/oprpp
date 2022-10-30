@@ -2,6 +2,10 @@ package hr.fer.oprpp1.custom.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.Test;
 
 public class SimpleHashtableTest {
@@ -247,24 +251,115 @@ public class SimpleHashtableTest {
         SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>();
 
         table.put(1, 2);
-        table.put(2, 3);
+        table.put(1 + 16, 3);
+        table.put(1 + 32, 3);
         table.put(3, 4);
         table.put(4, 5);
         table.put(1, 6);
 
-        var iterator = table.iterator();
+        final var iterator = table.iterator();
 
         assertTrue(iterator.hasNext());
         assertEquals(1, iterator.next().getKey());
         assertTrue(iterator.hasNext());
-        assertEquals(2, iterator.next().getKey());
+        assertEquals(1 + 32, iterator.next().getKey());
         assertTrue(iterator.hasNext());
         assertEquals(3, iterator.next().getKey());
         assertTrue(iterator.hasNext());
         assertEquals(4, iterator.next().getKey());
+        assertTrue(iterator.hasNext());
+        assertEquals(1 + 16, iterator.next().getKey());
         assertFalse(iterator.hasNext());
 
         assertThrows(NoSuchElementException.class, () -> iterator.next());
 
+        // test remove
+
+        final var iterator2 = table.iterator();
+
+        assertTrue(iterator2.hasNext());
+        assertEquals(1, iterator2.next().getKey());
+        iterator2.remove();
+        assertThrows(IllegalStateException.class, () -> iterator2.remove());
+        assertFalse(table.containsKey(1));
+
+        assertTrue(iterator2.hasNext());
+        assertEquals(1 + 32, iterator2.next().getKey());
+        iterator2.remove();
+        assertFalse(table.containsKey(1 + 32));
+
+        assertTrue(iterator2.hasNext());
+        assertEquals(3, iterator2.next().getKey());
+        iterator2.remove();
+        assertFalse(table.containsKey(3));
+
+        assertTrue(iterator2.hasNext());
+        assertEquals(4, iterator2.next().getKey());
+        iterator2.remove();
+        assertFalse(table.containsKey(4));
+
+    }
+
+    @Test
+    public void testConcurrentModification() {
+
+        SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>();
+
+        table.put(1, 2);
+        table.put(1 + 16, 3);
+        table.put(1 + 32, 3);
+        table.put(3, 4);
+
+        String s = "";
+
+        Iterator<SimpleHashtable.TableEntry<Integer, Integer>> iter = table.iterator();
+        while (iter.hasNext()) {
+            SimpleHashtable.TableEntry<Integer, Integer> pair = iter.next();
+            if (pair.getKey().equals(17)) {
+                iter.remove();
+            } else {
+                s += pair.getKey();
+            }
+        }
+
+        SimpleHashtable<Integer, Integer> table2 = new SimpleHashtable<>();
+
+        table2.put(1, 2);
+        table2.put(1 + 16, 3);
+        table2.put(1 + 32, 3);
+        table2.put(3, 4);
+
+        assertEquals("1333", s);
+
+        final var iter2 = table2.iterator();
+
+        assertEquals(1, iter2.next().getKey());
+
+        table2.put(1 + 16, 5);
+
+        assertDoesNotThrow(() -> iter2.next());
+
+        table2.put(1 + 64, 5);
+
+        assertThrows(ConcurrentModificationException.class, () -> iter2.next());
+    }
+
+    @Test
+    public void testClear() {
+        SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>();
+
+        table.put(1, 2);
+        table.put(1 + 16, 3);
+        table.put(1 + 32, 3);
+        table.put(3, 4);
+        table.put(4, 5);
+        table.put(1, 6);
+
+        assertEquals(5, table.size());
+
+        table.clear();
+
+        assertEquals(0, table.size());
+        assertTrue(table.isEmpty());
     }
 }
