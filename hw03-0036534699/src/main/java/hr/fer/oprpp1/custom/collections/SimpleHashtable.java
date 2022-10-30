@@ -5,7 +5,17 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Klasa koja implementira funckionalnost hash tablice.
+ * 
+ *
+ * @param <K> tip ključa
+ * @param <V> tip vrijednosti
+ */
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
+    /**
+     * Klasa koja predstavlja clan tablice.
+     */
     public static class TableEntry<K, V> {
         private K key;
         private V value;
@@ -38,6 +48,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     private TableEntry<K, V>[] table;
 
+    /**
+     * Konstruktor koji stvara tablicu velicine 16.
+     */
     public SimpleHashtable() {
         this(DEFAULT_CAPACITY);
     }
@@ -58,6 +71,13 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         this.table = (TableEntry<K, V>[]) Arrays.copyOf(t, pow2Capacity);
     }
 
+    /**
+     * Umece element u tablicu.
+     * 
+     * @param key   kljuc
+     * @param value vrijednost koja se umetne
+     * @return V
+     */
     public V put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -95,6 +115,12 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     }
 
+    /**
+     * Dohvaca vrijednost iz tablice koja ima ist kljuc.
+     * 
+     * @param key kljuc
+     * @return V vrijednost
+     */
     public V get(K key) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -119,10 +145,21 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     }
 
+    /**
+     * Vraca broj elemenata u tablici.
+     * 
+     * @return int
+     */
     public int size() {
         return size;
     }
 
+    /**
+     * Vraca true ako tablica sadrzi element sa zadanim kljucem.
+     * 
+     * @param key
+     * @return boolean
+     */
     public boolean containsKey(K key) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -146,6 +183,12 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return false;
     }
 
+    /**
+     * Vraca true ako tablica sadrzi element sa zadanom vrijednoscu.
+     * 
+     * @param value
+     * @return boolean
+     */
     public boolean containsValue(V value) {
         for (TableEntry<K, V> slot : table) {
             while (slot != null) {
@@ -159,6 +202,14 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return false;
     }
 
+    /**
+     * Uklanja element iz tablice prema kljucu.
+     * 
+     * Vrati null ako element ne postoji.
+     * 
+     * @param key
+     * @return V
+     */
     public V remove(K key) {
         int idx = Math.abs(key.hashCode()) % capacity;
 
@@ -189,10 +240,20 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return null;
     }
 
+    /**
+     * Provjera da li je tablica prazna.
+     * 
+     * @return boolean
+     */
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * Vraca string reprezentaciju tablice.
+     * 
+     * @return String
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
@@ -214,6 +275,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return sb.toString();
     }
 
+    /**
+     * Vraca polje entrija tablice.
+     * 
+     * @return TableEntry<K, V>[]
+     */
     public TableEntry<K, V>[] toArray() {
         @SuppressWarnings("unchecked")
         TableEntry<K, V>[] t = (TableEntry<K, V>[]) new TableEntry[1];
@@ -230,12 +296,18 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return arr;
     }
 
+    /**
+     * Rehasha ako je to potrebno.
+     */
     private void checkLoadAndRehash() {
         if (size / (double) capacity > DEFAULT_MAX_LOAD_FACTOR) {
             rehash();
         }
     }
 
+    /**
+     * Rehasha tablicu.
+     */
     private void rehash() {
         capacity *= 2;
         size = 0;
@@ -253,6 +325,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
     }
 
+    /**
+     * Cisti tablicu.
+     * 
+     * Ne resizea internu tablicu.
+     */
     public void clear() {
         // GC bi se trebao pobrinuti obrisati rekurzivno dalje
         for (int i = 0; i < capacity; i++) {
@@ -263,6 +340,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         ++lastModificationCount;
     }
 
+    /**
+     * Klasa iteratora tablice.
+     */
     private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
         int i = 0;
         int modificationCount = lastModificationCount;
@@ -270,6 +350,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         boolean lastRemoved = false;
 
+        /**
+         * Vraca true ako postoji iduci element.
+         */
         @Override
         public boolean hasNext() {
 
@@ -288,6 +371,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             return false;
         }
 
+        /**
+         * Vraca iduci element.
+         */
         @Override
         public TableEntry<K, V> next() {
             if (!hasNext()) {
@@ -314,6 +400,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             throw new NoSuchElementException("Nema vise objekata!");
         }
 
+        /**
+         * Uklanja trenutni element.
+         * 
+         * Ne smije se pozivati dva puta zaredom.
+         */
         @Override
         public void remove() {
             if (lastRemoved) {
@@ -331,6 +422,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             lastRemoved = true;
         }
 
+        /**
+         * Provjerava da li je tablica izmijenjena.
+         */
         private void checkModification() {
             if (modificationCount != lastModificationCount) {
                 throw new ConcurrentModificationException("Tablica promjenjena izvana!");
@@ -338,6 +432,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
     }
 
+    /**
+     * Vraca iterator tablice.
+     * 
+     * @return Iterator<TableEntry<K, V>>
+     */
     @Override
     public Iterator<TableEntry<K, V>> iterator() {
         return new IteratorImpl();

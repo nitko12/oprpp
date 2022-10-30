@@ -1,17 +1,35 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * Rijecnicka struktura podataka,
+ * 
+ * jednostavna implementacija, nije efikasna.
+ */
 public class Dictionary<K, V> {
 
     private ArrayIndexedCollection<Pair<K, V>> container;
 
+    /*
+     * Konstruktor koji kreira novu praznu strukturu.
+     */
     public Dictionary() {
         container = new ArrayIndexedCollection<>();
     }
 
+    /**
+     * Vraca je li struktura prazna.
+     * 
+     * @return boolean
+     */
     boolean isEmpty() {
         return container.isEmpty();
     }
 
+    /**
+     * Vraca velicinu strukture.
+     * 
+     * @return int
+     */
     int size() {
         return container.size();
     }
@@ -20,6 +38,13 @@ public class Dictionary<K, V> {
         container.clear();
     }
 
+    /**
+     * Sprema par kljuc-vrijednost u strukturu.
+     * 
+     * @param key
+     * @param value
+     * @return V
+     */
     V put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -37,6 +62,12 @@ public class Dictionary<K, V> {
         return null;
     }
 
+    /**
+     * Dobavlja vrijednost za zadani kljuc.
+     * 
+     * @param key
+     * @return V
+     */
     V get(Object key) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -51,6 +82,12 @@ public class Dictionary<K, V> {
         return null;
     }
 
+    /**
+     * Uklanja par kljuc-vrijednost iz strukture prema kljucu.
+     * 
+     * @param key
+     * @return V
+     */
     V remove(K key) {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
@@ -67,23 +104,50 @@ public class Dictionary<K, V> {
         return null;
     }
 
+    /**
+     * Pomocna klasa koja predstavlja par kljuc-vrijednost.
+     * 
+     * @param <K>
+     * @param <V>
+     */
     private static class Pair<K, V> {
         private K key;
         private V value;
 
+        /**
+         * Konstruktor koji kreira novi par kljuc-vrijednost.
+         * 
+         * @param key
+         * @param value
+         */
         public Pair(K key, V value) {
             this.key = key;
             this.value = value;
         }
 
+        /**
+         * Vraca kljuc.
+         * 
+         * @return K
+         */
         public K getKey() {
             return key;
         }
 
+        /**
+         * Vraca vrijednost.
+         * 
+         * @return V
+         */
         public V getValue() {
             return value;
         }
 
+        /**
+         * Postavlja vrijednost.
+         * 
+         * @param value
+         */
         public void setValue(V value) {
             this.value = value;
         }
