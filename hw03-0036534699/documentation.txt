@@ -1,0 +1,20 @@
+Prvi zadatak bio je straightforward.
+Disableao sam sve testove i, zamjenio u svim fileovima Object s T i fixao errore.
+Poslije ih reenableao, izmjenivsi im tipove gdje su bili mjesani.
+
+Drugi zadatak sam pogledao kako java collections framework implementira generice te koristio slican nacin.
+Isprva sam generice radio pomocu Array.copyOf nad poljem napravljenim iz objekta, kasnije saznao da se moze
+napraviti i raw tip bez generica i onda ga castati u generic specificirani tip, pa sam i to koristio, no svejedno proveo i kroz copyOf.
+npr primjer iz 3. zadatka koji je radio probleme:
+
+@SuppressWarnings("unchecked")
+TableEntry<K, V>[] t = (TableEntry<K, V>[]) new TableEntry[1];
+TableEntry<K, V>[] arr = Arrays.copyOf(t, size);
+
+Ovaj primjer ne bi radio da je Object npr. jvm ne dopusti cast.
+Implementacija sama po sebi je linearna pretraga.
+
+Treci zadatak
+Pogledao sam kako rade hash-evi u Javi te implementirao sve.
+Problema je bilo kod iteratora, jer je logika iza remove-a malo zbunjujuca.
+Dosta sam proveo debuggajuci testove za to, coverage je sada prakticki 100% (izuzev dvije tri linije reduntantog koda koji se bojim maknuti) pa sam dovoljno siguran da radi.
