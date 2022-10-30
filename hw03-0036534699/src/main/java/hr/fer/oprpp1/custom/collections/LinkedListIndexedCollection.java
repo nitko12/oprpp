@@ -1,20 +1,20 @@
 package hr.fer.oprpp1.custom.collections;
 
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 /**
  * Implementacija duplo povezane liste.
  */
-public class LinkedListIndexedCollection implements List {
-    private static class ListNode {
-        ListNode prev, next;
-
-        Object val;
+public class LinkedListIndexedCollection<T> implements List<T> {
+    private static class ListNode<T> {
+        ListNode<T> prev, next;
+        T val;
     }
 
     private int size;
-    private ListNode first, last;
+    private ListNode<T> first, last;
 
     private long modificationCount;
 
@@ -24,7 +24,7 @@ public class LinkedListIndexedCollection implements List {
         size = 0;
     }
 
-    public LinkedListIndexedCollection(Collection collection) {
+    public LinkedListIndexedCollection(Collection<T> collection) {
         if (collection == null) {
             throw new NullPointerException("Kolekcija ne smije biti null!");
         }
@@ -46,12 +46,12 @@ public class LinkedListIndexedCollection implements List {
      * 
      * @param value
      */
-    public void add(Object value) {
+    public void add(T value) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
         }
 
-        ListNode node = new ListNode();
+        ListNode<T> node = new ListNode<>();
         node.val = value;
 
         if (first == null) {
@@ -71,9 +71,9 @@ public class LinkedListIndexedCollection implements List {
      * Dohvaća element na zadanom indeksu.
      * 
      * @param index
-     * @return Object
+     * @return T
      */
-    public Object get(int index) {
+    public T get(int index) {
         return getNode(index).val;
     }
 
@@ -95,7 +95,7 @@ public class LinkedListIndexedCollection implements List {
      * @param value
      * @param position
      */
-    public void insert(Object value, int position) {
+    public void insert(T value, int position) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
         }
@@ -104,7 +104,7 @@ public class LinkedListIndexedCollection implements List {
             throw new IndexOutOfBoundsException("Indeks je izvan raspona!");
         }
 
-        ListNode node = new ListNode();
+        ListNode<T> node = new ListNode<>();
         node.val = value;
 
         if (position == size) {
@@ -116,7 +116,7 @@ public class LinkedListIndexedCollection implements List {
             return;
         }
 
-        ListNode toInsert = getNode(position);
+        ListNode<T> toInsert = getNode(position);
 
         if (toInsert.prev == null) {
             first = node;
@@ -139,12 +139,12 @@ public class LinkedListIndexedCollection implements List {
      * @param value
      * @return int
      */
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
         if (value == null) {
             return -1;
         }
 
-        ListNode node = first;
+        ListNode<T> node = first;
 
         for (int i = 0; i < size; ++i) {
             if (node.val.equals(value)) {
@@ -164,7 +164,7 @@ public class LinkedListIndexedCollection implements List {
      */
     public void remove(int index) {
 
-        ListNode node = getNode(index);
+        ListNode<T> node = getNode(index);
 
         if (node.prev == null && node.next == null) {
             first = null;
@@ -190,7 +190,7 @@ public class LinkedListIndexedCollection implements List {
      * @param value
      * @return boolean
      */
-    public boolean remove(Object value) {
+    public boolean remove(T value) {
         int index = indexOf(value);
 
         if (index == -1) {
@@ -208,12 +208,14 @@ public class LinkedListIndexedCollection implements List {
      * Pretvara kolekciju u polje.
      * Ne mjenja kolekciju, samo vrati polje.
      * 
-     * @return Object[]
+     * @return T[]
      */
-    public Object[] toArray() {
-        Object[] arr = new Object[size];
+    public T[] toArray() {
+        @SuppressWarnings("unchecked")
+        T[] t = (T[]) new Object[1];
+        T[] arr = (T[]) Arrays.copyOf(t, size);
 
-        ListNode node = first;
+        ListNode<T> node = first;
 
         int i = 0;
         while (node != null) {
@@ -229,7 +231,7 @@ public class LinkedListIndexedCollection implements List {
      * @param value
      * @return boolean
      */
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         return indexOf(value) != -1;
     }
 
@@ -241,13 +243,13 @@ public class LinkedListIndexedCollection implements List {
      * @param index
      * @return ListNode
      */
-    private ListNode getNode(int index) {
+    private ListNode<T> getNode(int index) {
         if (!(0 <= index && index < size)) {
             throw new IndexOutOfBoundsException("Indeks je izvan raspona!");
         }
 
         if (index < size / 2) {
-            ListNode node = first;
+            ListNode<T> node = first;
 
             while (index-- > 0) {
                 node = node.next;
@@ -256,7 +258,7 @@ public class LinkedListIndexedCollection implements List {
             return node;
         }
 
-        ListNode node = last;
+        ListNode<T> node = last;
         while (index++ < size - 1) {
             node = node.prev;
         }
@@ -264,8 +266,8 @@ public class LinkedListIndexedCollection implements List {
         return node;
     }
 
-    public ElementsGetter createElementsGetter() {
-        return new LinkedListIndexedCollectionElementsGetter(this);
+    public ElementsGetter<T> createElementsGetter() {
+        return new LinkedListIndexedCollectionElementsGetter<T>(this);
     }
 
     /**
@@ -273,16 +275,16 @@ public class LinkedListIndexedCollection implements List {
      *
      * Paziti da se ne koristi dok se mjenja kolekcija.
      */
-    private static class LinkedListIndexedCollectionElementsGetter implements ElementsGetter {
+    private static class LinkedListIndexedCollectionElementsGetter<T> implements ElementsGetter<T> {
 
-        private LinkedListIndexedCollection collection;
-        private ListNode runner;
+        private LinkedListIndexedCollection<T> collection;
+        private ListNode<T> runner;
         private long savedModificationCount = 0;
 
         /*
          * Konstruktor.
          */
-        public LinkedListIndexedCollectionElementsGetter(LinkedListIndexedCollection collection) {
+        public LinkedListIndexedCollectionElementsGetter(LinkedListIndexedCollection<T> collection) {
             // Ne moze se testirati
             // if (first == null) {
             // throw new NullPointerException("Element liste ne smije biti null!");
@@ -310,17 +312,17 @@ public class LinkedListIndexedCollection implements List {
          * 
          * @throws NoSuchElementException ako nema vise elemenata
          * 
-         * @return Object
+         * @return T
          */
         @Override
-        public Object getNextElement() {
+        public T getNextElement() {
             if (runner == null) {
                 throw new NoSuchElementException("Kraj kolekcije!");
             }
 
             checkModification();
 
-            ListNode t = runner;
+            ListNode<T> t = runner;
             runner = runner.next;
 
             return t.val;

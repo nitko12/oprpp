@@ -4,7 +4,7 @@ package hr.fer.oprpp1.custom.collections;
  * Apstraktna kolekcija koja sadrži metode koje su zajedničke svim kolekcijama,
  * no nisu jednako implementirane.
  */
-public interface Collection {
+public interface Collection<T> {
     /**
      * Vraća true ako je kolekcija prazna, inače vraća false.
      * 
@@ -26,7 +26,7 @@ public interface Collection {
      * 
      * @param value
      */
-    public void add(Object value);
+    public void add(T value);
 
     /**
      * Vraća true ako kolekcija sadrži element value, inače false.
@@ -34,7 +34,7 @@ public interface Collection {
      * @param value
      * @return boolean
      */
-    public boolean contains(Object value);
+    public boolean contains(T value);
 
     /**
      * Briše prvi element value iz kolekcije.
@@ -42,23 +42,23 @@ public interface Collection {
      * @param value
      * @return boolean
      */
-    public boolean remove(Object value);
+    public boolean remove(T value);
 
     /**
      * Pretvara kolekciju u polje.
      * Ne mjenja kolekciju, samo vrati polje.
      * 
-     * @return Object[]
+     * @return T[]
      */
-    public Object[] toArray();
+    public T[] toArray();
 
     /**
      * Procesira svaki element kolekcije metodom process u processor klasi.
      * 
      * @param processor
      */
-    public default void forEach(Processor processor) {
-        ElementsGetter getter = createElementsGetter();
+    public default void forEach(Processor<T> processor) {
+        ElementsGetter<T> getter = createElementsGetter();
         while (getter.hasNextElement()) {
             processor.process(getter.getNextElement());
         }
@@ -69,10 +69,10 @@ public interface Collection {
      * 
      * @param other
      */
-    public default void addAll(Collection other) {
-        class LocalProcessor implements Processor {
+    public default void addAll(Collection<T> other) {
+        class LocalProcessor implements Processor<T> {
             @Override
-            public void process(Object value) {
+            public void process(T value) {
                 add(value);
             }
         }
@@ -91,7 +91,7 @@ public interface Collection {
      * 
      * @return ElementsGetter
      */
-    public ElementsGetter createElementsGetter();
+    public ElementsGetter<T> createElementsGetter();
 
     /**
      * Dodaje sve objekte iz col koji zadovoljavaju uvjet predan u testeru u
@@ -100,11 +100,11 @@ public interface Collection {
      * @param col
      * @param tester
      */
-    public default void addAllSatisfying(Collection col, Tester tester) {
-        ElementsGetter getter = col.createElementsGetter();
+    public default void addAllSatisfying(Collection<T> col, Tester<T> tester) {
+        ElementsGetter<T> getter = col.createElementsGetter();
 
         while (getter.hasNextElement()) {
-            Object element = getter.getNextElement();
+            T element = getter.getNextElement();
 
             if (tester.test(element)) {
                 add(element);

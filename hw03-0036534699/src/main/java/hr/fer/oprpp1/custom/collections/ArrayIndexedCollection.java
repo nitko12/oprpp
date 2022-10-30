@@ -1,18 +1,19 @@
 package hr.fer.oprpp1.custom.collections;
 
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 /**
  * Implementacija kolekcije koja se temelji na polju.
  */
-public class ArrayIndexedCollection implements List {
+public class ArrayIndexedCollection<T> implements List<T> {
 
     public static final int DEFAULT_CAPACITY = 16;
     private int size;
     private int modificationCount = 0;
 
-    private Object[] elements;
+    private T[] elements;
 
     /**
      * Konstruktor koji postavlja kapacitet na 16.
@@ -30,14 +31,17 @@ public class ArrayIndexedCollection implements List {
         if (initialCapacity < 1) {
             throw new IllegalArgumentException("Inicijalni kapacitet mora biti veći od 0!");
         }
-        elements = new Object[initialCapacity];
+
+        @SuppressWarnings("unchecked")
+        T[] t = (T[]) new Object[1];
+        elements = (T[]) Arrays.copyOf(t, initialCapacity);
         size = 0;
     }
 
     /**
      * Konstruktor koji kopira elemente iz kolekcije collection u novu kolekciju.
      */
-    public ArrayIndexedCollection(Collection other) {
+    public ArrayIndexedCollection(Collection<T> other) {
         this(other, DEFAULT_CAPACITY);
     }
 
@@ -46,7 +50,7 @@ public class ArrayIndexedCollection implements List {
      * Ako je kapacitet manji od veličine kolekcije, kapacitet se postavlja na
      * veličinu kolekcije.
      */
-    public ArrayIndexedCollection(Collection other, int initialCapacity) {
+    public ArrayIndexedCollection(Collection<T> other, int initialCapacity) {
         if (other == null) {
             throw new NullPointerException("Kolekcija ne smije biti null!");
         }
@@ -56,9 +60,14 @@ public class ArrayIndexedCollection implements List {
         }
 
         if (other.size() > initialCapacity) {
-            elements = new Object[other.size()];
+            @SuppressWarnings("unchecked")
+            T[] t = (T[]) new Object[1];
+            elements = (T[]) Arrays.copyOf(t, other.size());
+
         } else {
-            elements = new Object[initialCapacity];
+            @SuppressWarnings("unchecked")
+            T[] t = (T[]) new Object[1];
+            elements = (T[]) Arrays.copyOf(t, initialCapacity);
         }
 
         addAll(other);
@@ -81,7 +90,7 @@ public class ArrayIndexedCollection implements List {
      * @param value
      */
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
         }
@@ -93,7 +102,7 @@ public class ArrayIndexedCollection implements List {
      * Briše sve elemente iz kolekcije.
      * 
      * @param index
-     * @return Object
+     * @return T
      */
     @Override
     public void clear() {
@@ -112,10 +121,10 @@ public class ArrayIndexedCollection implements List {
      *                                   veličine kolekcije.
      * 
      * @param index
-     * @return Object
+     * @return T
      */
     // complexity of O(1)
-    public Object get(int index) {
+    public T get(int index) {
         if (!(0 <= index && index < size)) {
             throw new IndexOutOfBoundsException("Indeks je izvan raspona!");
         }
@@ -133,7 +142,7 @@ public class ArrayIndexedCollection implements List {
      * @param position
      */
     // complexity of O(n)
-    public void insert(Object value, int position) {
+    public void insert(T value, int position) {
         if (value == null) {
             throw new NullPointerException("Vrijednost ne smije biti null!");
         }
@@ -162,7 +171,7 @@ public class ArrayIndexedCollection implements List {
      * @return int
      */
     // complexity of O(n)
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
         if (value == null) {
             return -1;
         }
@@ -209,7 +218,7 @@ public class ArrayIndexedCollection implements List {
      * @return boolean
      */
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         return indexOf(value) != -1;
     }
 
@@ -220,7 +229,7 @@ public class ArrayIndexedCollection implements List {
      * @return boolean
      */
     @Override
-    public boolean remove(Object value) {
+    public boolean remove(T value) {
         int index = indexOf(value);
 
         if (index == -1) {
@@ -235,11 +244,13 @@ public class ArrayIndexedCollection implements List {
     /**
      * Pretvara kolekciju u polje.
      * 
-     * @return Object[]
+     * @return T[]
      */
     @Override
-    public Object[] toArray() {
-        Object[] array = new Object[size];
+    public T[] toArray() {
+        @SuppressWarnings("unchecked")
+        T[] t = (T[]) new Object[1];
+        T[] array = (T[]) Arrays.copyOf(t, size);
 
         for (int i = 0; i < size; i++) {
             array[i] = elements[i];
@@ -252,7 +263,9 @@ public class ArrayIndexedCollection implements List {
      * Povećava kapacitet polja za duplo.
      */
     private void doubleArraySize() {
-        Object[] newArray = new Object[elements.length * 2];
+        @SuppressWarnings("unchecked")
+        T[] t = (T[]) new Object[1];
+        T[] newArray = (T[]) Arrays.copyOf(t, elements.length * 2);
 
         for (int i = 0; i < elements.length; i++) {
             newArray[i] = elements[i];
@@ -267,7 +280,9 @@ public class ArrayIndexedCollection implements List {
      * Ne provjerava koristimo li drugu polovinu!
      */
     private void shrinkInHalf() {
-        Object[] newArray = new Object[elements.length / 2];
+        @SuppressWarnings("unchecked")
+        T[] t = (T[]) new Object[1];
+        T[] newArray = (T[]) Arrays.copyOf(t, elements.length / 2);
 
         for (int i = 0; i < size; i++) {
             newArray[i] = elements[i];
@@ -281,8 +296,8 @@ public class ArrayIndexedCollection implements List {
      * 
      * @return MyElementsGetter
      */
-    public ArrayIndexedColletionElementsGetter createElementsGetter() {
-        return new ArrayIndexedColletionElementsGetter(this);
+    public ArrayIndexedColletionElementsGetter<T> createElementsGetter() {
+        return new ArrayIndexedColletionElementsGetter<T>(this);
     }
 
     /**
@@ -290,9 +305,9 @@ public class ArrayIndexedCollection implements List {
      * 
      * Paziti da se ne koristi dok se mjenja kolekcija.
      */
-    private static class ArrayIndexedColletionElementsGetter implements ElementsGetter {
+    private static class ArrayIndexedColletionElementsGetter<T> implements ElementsGetter<T> {
         private int idx = 0;
-        private final ArrayIndexedCollection collection;
+        private final ArrayIndexedCollection<T> collection;
         private long savedModificationCount = 0;
 
         /**
@@ -300,7 +315,7 @@ public class ArrayIndexedCollection implements List {
          * 
          * @param collection
          */
-        public ArrayIndexedColletionElementsGetter(ArrayIndexedCollection collection) {
+        public ArrayIndexedColletionElementsGetter(ArrayIndexedCollection<T> collection) {
             // Ne moze se testirati
             // if (collection == null) {
             // throw new NullPointerException("Kolekcija ne smije biti null!");
@@ -327,10 +342,10 @@ public class ArrayIndexedCollection implements List {
          * 
          * @throws NoSuchElementException ako nema vise elemenata u kolekciji.
          * 
-         * @return Object
+         * @return T
          */
         @Override
-        public Object getNextElement() {
+        public T getNextElement() {
             if (!hasNextElement()) {
                 throw new NoSuchElementException("Kraj kolekcije!");
             }

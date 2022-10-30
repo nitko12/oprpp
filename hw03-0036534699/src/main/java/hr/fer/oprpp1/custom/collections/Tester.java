@@ -1,6 +1,6 @@
 package hr.fer.oprpp1.custom.collections;
 
-public interface Tester {
+public interface Tester<T> {
 
     /**
      * Testira zadovoljava li objekt zadani uvjet.
@@ -8,5 +8,5 @@ public interface Tester {
      * @param obj
      * @return true ako zadovoljava, false inače
      */
-    boolean test(Object obj);
+    boolean test(T obj);
 }

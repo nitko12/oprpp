@@ -1,20 +1,20 @@
 package hr.fer.oprpp1.custom.collections;
 
-public interface List extends Collection {
+public interface List<T> extends Collection<T> {
     /*
      * Vraca objekt na indeksu idx.
      */
-    Object get(int idx);
+    T get(int idx);
 
     /*
      * Postavlja vrijednost na indeksu idx.
      */
-    void insert(Object val, int pos);
+    void insert(T val, int pos);
 
     /*
      * Vraca indeks prvog pojavljivanja objekta val u kolekciji.
      */
-    int indexOf(Object val);
+    int indexOf(T val);
 
     /*
      * Brise objekt na indeksu idx.

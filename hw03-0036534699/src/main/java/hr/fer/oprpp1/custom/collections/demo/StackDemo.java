@@ -23,7 +23,7 @@ public class StackDemo {
     }
 
     public static int evaluate(String[] input) {
-        ObjectStack stack = new ObjectStack();
+        ObjectStack<Integer> stack = new ObjectStack<>();
 
         for (String s : input) {
             if (is_number(s))
