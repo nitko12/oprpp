@@ -27,6 +27,7 @@ public class SimpleHashtable<K, V> {
     }
 
     private static final int DEFAULT_CAPACITY = 16;
+    private static final double DEFAULT_MAX_LOAD_FACTOR = 0.75;
 
     private int size;
     private int capacity;
@@ -57,6 +58,8 @@ public class SimpleHashtable<K, V> {
         if (key == null) {
             throw new NullPointerException("Kljuc ne smije biti null!");
         }
+
+        checkLoadAndRehash();
 
         int idx = Math.abs(key.hashCode()) % capacity;
 
@@ -217,5 +220,37 @@ public class SimpleHashtable<K, V> {
         }
 
         return arr;
+    }
+
+    private void checkLoadAndRehash() {
+        if (size / (double) capacity > DEFAULT_MAX_LOAD_FACTOR) {
+            rehash();
+        }
+    }
+
+    private void rehash() {
+        capacity *= 2;
+        size = 0;
+
+        @SuppressWarnings({ "unchecked" })
+        TableEntry<K, V>[] t = (TableEntry<K, V>[]) new TableEntry[capacity];
+        TableEntry<K, V>[] oldTable = table;
+        table = (TableEntry<K, V>[]) Arrays.copyOf(t, capacity);
+
+        for (TableEntry<K, V> slot : oldTable) {
+            while (slot != null) {
+                put(slot.getKey(), slot.getValue());
+                slot = slot.next;
+            }
+        }
+    }
+
+    public void clear() {
+        // GC bi se trebao pobrinuti obrisati rekurzivno dalje
+        for (int i = 0; i < capacity; i++) {
+            table[i] = null;
+        }
+
+        size = 0;
     }
 }

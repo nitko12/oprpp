@@ -212,4 +212,33 @@ public class SimpleHashtableTest {
         assertEquals(3, array[2].getKey());
         assertEquals(4, array[3].getKey());
     }
+
+    @Test
+    void clear() {
+        SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>();
+
+        table.put(1, 2);
+        table.put(2, 3);
+        table.put(3, 4);
+        table.put(4, 5);
+        table.put(1, 6);
+
+        assertEquals(4, table.size());
+
+        table.clear();
+
+        assertEquals(0, table.size());
+        assertTrue(table.isEmpty());
+    }
+
+    @Test
+    void testRehash() {
+        SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>(2);
+
+        for (int i = 0; i < 512; ++i)
+            table.put(i, i + 1);
+
+        for (int i = 0; i < 512; ++i)
+            assertEquals(i + 1, table.get(i));
+    }
 }
