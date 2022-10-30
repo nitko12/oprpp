@@ -241,4 +241,30 @@ public class SimpleHashtableTest {
         for (int i = 0; i < 512; ++i)
             assertEquals(i + 1, table.get(i));
     }
+
+    @Test
+    public void testIterable() {
+        SimpleHashtable<Integer, Integer> table = new SimpleHashtable<>();
+
+        table.put(1, 2);
+        table.put(2, 3);
+        table.put(3, 4);
+        table.put(4, 5);
+        table.put(1, 6);
+
+        var iterator = table.iterator();
+
+        assertTrue(iterator.hasNext());
+        assertEquals(1, iterator.next().getKey());
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next().getKey());
+        assertTrue(iterator.hasNext());
+        assertEquals(3, iterator.next().getKey());
+        assertTrue(iterator.hasNext());
+        assertEquals(4, iterator.next().getKey());
+        assertFalse(iterator.hasNext());
+
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
+
+    }
 }

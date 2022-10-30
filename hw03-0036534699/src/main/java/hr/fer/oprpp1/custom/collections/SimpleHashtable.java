@@ -1,8 +1,10 @@
 package hr.fer.oprpp1.custom.collections;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class SimpleHashtable<K, V> {
+public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
     public static class TableEntry<K, V> {
         private K key;
         private V value;
@@ -252,5 +254,77 @@ public class SimpleHashtable<K, V> {
         }
 
         size = 0;
+    }
+
+    private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
+        int i = 0;
+        int j = 0;
+        TableEntry<K, V> current = null;
+
+        public IteratorImpl() {
+            while (j < table.length && table[j] == null) {
+                j++;
+            }
+            current = table[j];
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (i < size) {
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public SimpleHashtable.TableEntry<K, V> next() {
+            if (!hasNext() || current == null) {
+                throw new NoSuchElementException("Nema vise elemenata u tablici!");
+            }
+
+            TableEntry<K, V> next = current;
+            stepCurrent();
+
+            ++i;
+            return next;
+        }
+
+        @Override
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException("Nema trenutnog elementa!");
+            }
+
+            if (current.next == null) {
+                table[j] = null;
+                stepCurrent();
+            } else {
+                current.setValue(current.next.getValue());
+                current.key = current.next.key;
+                current.next = current.next.next;
+            }
+        }
+
+        private void stepCurrent() {
+            if (current.next != null) {
+                current = current.next;
+            } else {
+                j++;
+                while (j < table.length && table[j] == null) {
+                    j++;
+                }
+                if (j < table.length) {
+                    current = table[j];
+                } else {
+                    current = null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public Iterator<TableEntry<K, V>> iterator() {
+        return new IteratorImpl();
     }
 }
