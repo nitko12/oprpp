@@ -42,12 +42,12 @@ public class StudentTableFormatter {
         StringBuilder sb = new StringBuilder();
 
         sb.append("+");
-        sb.append("-".repeat(Math.max(0, jmbagLength + 2)));
+        sb.append("=".repeat(Math.max(0, jmbagLength + 2)));
         sb.append("+");
-        sb.append("-".repeat(Math.max(0, lastNameLength + 2)));
+        sb.append("=".repeat(Math.max(0, lastNameLength + 2)));
         sb.append("+");
-        sb.append("-".repeat(Math.max(0, firstNameLength + 2)));
-        sb.append("+---+\n");
+        sb.append("=".repeat(Math.max(0, firstNameLength + 2)));
+        sb.append("+===+\n");
 
         return sb.toString();
     }

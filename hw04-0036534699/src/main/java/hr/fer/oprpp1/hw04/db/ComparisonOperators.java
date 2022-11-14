@@ -1,9 +1,18 @@
 package hr.fer.oprpp1.hw04.db;
 
-import java.util.List;
-
+/**
+ * Functional methods that checks if two strings satisfy a condition.
+ */
 public class ComparisonOperators {
 
+    /**
+     * Checks if the first string is lex. less than the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is lex. less than the second string, false
+     *         otherwise
+     */
     private static class Less implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -11,6 +20,14 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Checks if the first string is lex. less or equal to the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is lex. less or equal to the second string,
+     *         false otherwise
+     */
     private static class LessOrEquals implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -18,6 +35,15 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Checks if the first string is lex. greater than the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is lex. greater than the second string,
+     *         false
+     *         otherwise
+     */
     private static class Greater implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -25,6 +51,15 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Checks if the first string is lex. greater or equal to the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is lex. greater or equal to the second
+     *         string,
+     *         false otherwise
+     */
     private static class GreaterOrEquals implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -32,6 +67,14 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Checks if the first string is equal to the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is equal to the second string, false
+     *         otherwise
+     */
     private static class Equals implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -39,6 +82,14 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Checks if the first string is not equal to the second string.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is not equal to the second string, false
+     *         otherwise
+     */
     private static class NotEquals implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -46,6 +97,13 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Helper method that counts the number of occurrences of the given pattern
+     * 
+     * @param value
+     * @param substring
+     * @return int
+     */
     private static int countOccurance(String value, String substring) {
         int count = 0;
 
@@ -58,6 +116,13 @@ public class ComparisonOperators {
         return count;
     }
 
+    /**
+     * Checks if the first string is like the second string using a * pattern.
+     *
+     * @param value1 first string
+     * @param value2 second string
+     * @return true if the first string is like the second string, false otherwise
+     */
     private static class Like implements IComparisonOperator {
         @Override
         public boolean satisfied(String value1, String value2) {
@@ -96,6 +161,9 @@ public class ComparisonOperators {
         }
     };
 
+    /**
+     * Initializes the static variables.
+     */
     public static final IComparisonOperator LESS = new Less();
     public static final IComparisonOperator LESS_OR_EQUALS = new LessOrEquals();
     public static final IComparisonOperator GREATER = new Greater();

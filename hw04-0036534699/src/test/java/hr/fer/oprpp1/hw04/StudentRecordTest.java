@@ -2,8 +2,6 @@ package hr.fer.oprpp1.hw04;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import hr.fer.oprpp1.hw04.db.IFilter;

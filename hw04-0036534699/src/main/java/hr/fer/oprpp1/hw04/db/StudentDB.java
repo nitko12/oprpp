@@ -5,11 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class for storing a list of StudentRecords.
+ * 
+ */
 public class StudentDB {
 
     private List<StudentRecord> records;
     private Map<String, StudentRecord> jmbagIndex;
 
+    /**
+     * Creates a new StudentDB.
+     * 
+     * @param records list of StudentRecords
+     */
     public StudentDB(List<String> lines) {
 
         records = new ArrayList<>();
@@ -42,10 +51,22 @@ public class StudentDB {
         }
     }
 
+    /**
+     * Method for finding a single StudentRecord by JMBAG.
+     * 
+     * @param jmbag
+     * @return StudentRecord
+     */
     public StudentRecord forJMBAG(String jmbag) {
         return jmbagIndex.get(jmbag);
     }
 
+    /**
+     * Method for filtering a list of StudentRecords.
+     * 
+     * @param filter
+     * @return List<StudentRecord>
+     */
     public List<StudentRecord> filter(IFilter filter) {
         ArrayList<StudentRecord> filteredRecords = new ArrayList<>();
 

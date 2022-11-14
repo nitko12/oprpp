@@ -57,4 +57,20 @@ public class StudentDBTest {
 
         assertEquals(db.filter(filter).size(), 1);
     }
+
+    @Test
+    void taskTest() {
+        IFilter filter1 = record -> false;
+        IFilter filter2 = record -> true;
+
+        ArrayList<String> lines = new ArrayList<>(
+                Arrays.asList(
+                        "0000000018	Gužvinec	Matija	3",
+                        "0000000019	Gvardijan	Slaven	4"));
+
+        StudentDB db = new StudentDB(lines);
+
+        assertEquals(db.filter(filter1).size(), 0);
+        assertEquals(db.filter(filter2).size(), 2);
+    }
 }

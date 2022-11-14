@@ -2,15 +2,9 @@ package hr.fer.oprpp1.hw04;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import hr.fer.oprpp1.hw04.db.ComparisonOperators;
-import hr.fer.oprpp1.hw04.db.IFilter;
-import hr.fer.oprpp1.hw04.db.StudentDB;
-import hr.fer.oprpp1.hw04.db.StudentRecord;
 
 public class ComparisonOperatorsTest {
 

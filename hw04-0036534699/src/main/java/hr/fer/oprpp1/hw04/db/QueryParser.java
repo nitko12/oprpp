@@ -3,11 +3,20 @@ package hr.fer.oprpp1.hw04.db;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for parsing a query.
+ * 
+ */
 public class QueryParser {
 
     boolean directQuery;
     ArrayList<ConditionalExpression> queryList = new ArrayList<>();
 
+    /**
+     * Creates a new QueryParser.
+     * 
+     * @param query query
+     */
     public QueryParser(String query) {
         if (query == null) {
             throw new IllegalArgumentException("Query mora biti definiran.");
@@ -124,10 +133,20 @@ public class QueryParser {
         }
     }
 
+    /**
+     * Returns true if query is direct.
+     * 
+     * @return boolean
+     */
     public boolean isDirectQuery() {
         return directQuery;
     }
 
+    /**
+     * Returns jmbag if query is direct.
+     * 
+     * @return String
+     */
     public String getQueriedJMBAG() {
         if (!directQuery) {
             throw new IllegalStateException("Query nije direktan.");
@@ -136,6 +155,11 @@ public class QueryParser {
         return queryList.get(0).getStringLiteral();
     }
 
+    /**
+     * Returns list of conditional expressions.
+     * 
+     * @return List<ConditionalExpression>
+     */
     public List<ConditionalExpression> getQuery() {
         return queryList;
     }

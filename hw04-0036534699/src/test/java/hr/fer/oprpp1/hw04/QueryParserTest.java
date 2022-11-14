@@ -5,17 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
-import hr.fer.oprpp1.hw04.db.ComparisonOperators;
 import hr.fer.oprpp1.hw04.db.ConditionalExpression;
-import hr.fer.oprpp1.hw04.db.FieldValueGetters;
-import hr.fer.oprpp1.hw04.db.IFilter;
+
 import hr.fer.oprpp1.hw04.db.QueryParser;
-import hr.fer.oprpp1.hw04.db.StudentDB;
+
 import hr.fer.oprpp1.hw04.db.StudentRecord;
 
 public class QueryParserTest {

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -15,7 +14,19 @@ import hr.fer.oprpp1.hw04.db.StudentDB;
 import hr.fer.oprpp1.hw04.db.StudentRecord;
 import hr.fer.oprpp1.hw04.db.StudentTableFormatter;
 
+/**
+ * CLI application that demonstrates the usage of the studentDB class.
+ */
 class StudentDBdemo {
+
+    /**
+     * Main method
+     * 
+     * Runs a command line application for queryinf students.
+     * 
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
         List<String> lines;
@@ -45,7 +56,14 @@ class StudentDBdemo {
 
             if (line.startsWith("query")) {
 
-                QueryParser parser = new QueryParser(line.substring(5));
+                QueryParser parser;
+
+                try {
+                    parser = new QueryParser(line.substring(5));
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    continue;
+                }
 
                 List<StudentRecord> records;
 
@@ -55,7 +73,6 @@ class StudentDBdemo {
                     records = List.of(db.forJMBAG(parser.getQueriedJMBAG()));
 
                 } else {
-
                     records = db.filter(new QueryFilter(parser.getQuery()));
                 }
 
@@ -72,7 +89,6 @@ class StudentDBdemo {
             } else {
                 System.out.println("Unknown command");
 
-                break;
             }
 
         }
