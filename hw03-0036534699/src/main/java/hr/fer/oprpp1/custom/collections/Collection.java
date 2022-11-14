@@ -100,7 +100,7 @@ public interface Collection<T> {
      * @param col
      * @param tester
      */
-    public default void addAllSatisfying(Collection<T> col, Tester<T> tester) {
+    public default void addAllSatisfying(Collection<T> col, Tester<T> tester) { // TODO: parametrizacija
         ElementsGetter<T> getter = col.createElementsGetter();
 
         while (getter.hasNextElement()) {

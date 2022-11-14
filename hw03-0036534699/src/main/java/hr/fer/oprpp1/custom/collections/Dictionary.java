@@ -50,10 +50,12 @@ public class Dictionary<K, V> {
             throw new NullPointerException("Kljuc ne smije biti null!");
         }
 
-        for (int i = 0; i < container.size(); i++) {
-            if (container.get(i).getKey().equals(key)) {
-                V old = container.get(i).getValue();
-                container.get(i).setValue(value);
+        for (int i = 0, n = container.size(); i < n; i++) {
+            var pair = container.get(i);
+
+            if (pair.getKey().equals(key)) {
+                V old = pair.getValue();
+                pair.setValue(value);
                 return old;
             }
         }
