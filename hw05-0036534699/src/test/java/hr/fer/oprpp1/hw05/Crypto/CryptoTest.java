@@ -12,12 +12,10 @@ import hr.fer.oprpp1.hw05.crypto.Crypto;
 public class CryptoTest {
     @Test
     public void testShaDigestStream() {
-        Crypto crypto = new Crypto();
-
         try {
             ByteArrayInputStream is = new ByteArrayInputStream("test123".getBytes());
 
-            String hash = crypto.shaDigestStream(is);
+            String hash = Crypto.shaDigestStream(is);
 
             assertEquals("ecd71870d1963316a97e3ac3408c9835ad8cf0f3c1bc703527c30265534f75ae", hash);
 
