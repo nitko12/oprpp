@@ -1,0 +1,235 @@
+1.
+
+Izmjenio sam implementaciju doOperation funckije u 
+
+private static int do_operation(String op, ObjectStack stack) {
+    if (op.equals("cubed")) {
+        int a = (int) stack.pop();
+        return a * a * a;
+    }
+
+    int a, b;
+    a = (int) stack.pop();
+    b = (int) stack.pop();
+
+    switch (op) {
+        case "+":
+            return a + b;
+        case "-":
+            return a - b;
+        case "/":
+            if (b == 0)
+                throw new IllegalArgumentException("Djeljenje s nulom!");
+            return a / b;
+        case "*":
+            return a * b;
+        case "%":
+            if (b == 0)
+                throw new IllegalArgumentException("Modulo s nulom!");
+            return a % b;
+        case "bigger":
+            return Math.max(a, b);
+        default:
+            throw new IllegalArgumentException("Nepoznata operacija!");
+    }
+}
+
+te njen poziv u stack.push(do_operation(s, stack));
+umjesto stack.push(do_operation(s, a, b));
+
+
+2.
+
+Dopisao sam metodu ovako:
+
+public default <K> void copyTransformedIntoIfAllowed(
+        Collection<Object> dest,
+        Function<T, K> transformer,
+        Predicate<K> tester) {
+
+    ElementsGetter<T> getter = createElementsGetter();
+
+    while (getter.hasNextElement()) {
+        T element = getter.getNextElement();
+
+        K transformed = transformer.apply(element);
+
+        if (tester.test(transformed)) {
+            dest.add(transformed);
+        }
+    }
+}
+
+i testni kod:
+
+package hr.fer.oprpp1.custom.collections.demo;
+
+import hr.fer.oprpp1.custom.collections.ArrayIndexedCollection;
+import hr.fer.oprpp1.custom.collections.Collection;
+
+public class CollectionMIDemo {
+    public static void main(String[] args) {
+        Collection<String> prva = new ArrayIndexedCollection<>();
+        Collection<Object> druga = new ArrayIndexedCollection<>();
+
+        prva.add("Ivo");
+        prva.add("Ivka");
+
+        prva.copyTransformedIntoIfAllowed(druga,
+                Object::hashCode,
+                n -> n.intValue() % 2 == 0);
+
+        for (Object o : druga.toArray()) {
+            System.out.println(o);
+        }
+    }
+}
+
+// ispis bude73922
+
+tip K osigurava da transformer napravi isti tip koji tester prihvaca.
+dest je Object da bi mogao spremiti bilo sto, kada bi ga stavio na K infereao bi
+i da Function i Predicate vracaju Object i ne bi mogli koristiti druge metode nad njima.
+
+3.
+
+Dodao sam u parser querija
+
+int showingQueryIndex = 0;
+for (int i = 0; i < splitQuery.length; i++) {
+    if (showingQuery) {
+        if (splitQuery[i].endsWith(","))
+            showingAttributes.add(splitQuery[i].substring(0, splitQuery[i].length() - 1));
+        else
+            showingAttributes.add(splitQuery[i]);
+    }
+
+    if (splitQuery[i].equals("showing")) {
+        showingQuery = true;
+        showingQueryIndex = i;
+    }
+}
+
+if (showingQuery) {
+    String[] splitQuery2 = new String[showingQueryIndex];
+
+    for (int i = 0; i < showingQueryIndex; i++) {
+        splitQuery2[i] = splitQuery[i];
+    }
+
+    splitQuery = splitQuery2;
+}
+
+
+te clanske variajble
+
+boolean directQuery, showingQuery;
+ArrayList<String> showingAttributes = new ArrayList<>();
+
+
+nadalje u formateru sam dodao novi konstruktor i clansku varijablu
+
+private Collection<String> showingAttributes;
+
+public StudentTableFormatter(List<StudentRecord> records) {
+    this.records = records;
+
+    for (StudentRecord record : records) {
+        jmbagLength = Math.max(jmbagLength, record.getJmbag().length());
+        lastNameLength = Math.max(lastNameLength, record.getLastName().length());
+        firstNameLength = Math.max(firstNameLength, record.getFirstName().length());
+    }
+}
+
+public StudentTableFormatter(List<StudentRecord> records, Collection<String> showingAttributes) {
+    this(records);
+
+    this.showingAttributes = showingAttributes;
+}
+
+te modificirao ispis, moglo se reusati kod ali ne bih to stigao implementirati sada
+
+private String makeEmptyRow() {
+    StringBuilder sb = new StringBuilder();
+
+    if (showingAttributes == null) {
+        sb.append("+");
+        sb.append("=".repeat(Math.max(0, jmbagLength + 2)));
+        sb.append("+");
+        sb.append("=".repeat(Math.max(0, lastNameLength + 2)));
+        sb.append("+");
+        sb.append("=".repeat(Math.max(0, firstNameLength + 2)));
+        sb.append("+===+\n");
+    } else {
+        for (String attribute : showingAttributes) {
+            switch (attribute) {
+                case "jmbag" -> {
+                    sb.append("+");
+                    sb.append("=".repeat(Math.max(0, jmbagLength + 2)));
+                }
+                case "lastName" -> {
+                    sb.append("+");
+                    sb.append("=".repeat(Math.max(0, lastNameLength + 2)));
+                }
+                case "firstName" -> {
+                    sb.append("+");
+                    sb.append("=".repeat(Math.max(0, firstNameLength + 2)));
+                }
+                case "finalGrade" -> {
+                    sb.append("+===+");
+                }
+            }
+        }
+        sb.append("+\n");
+    }
+
+    return sb.toString();
+}
+
+private String makeRow(String jmbag, String lastName, String firstName, String finalGrade) {
+    StringBuilder sb = new StringBuilder();
+
+    if (showingAttributes == null) {
+
+        sb.append("| ");
+        sb.append(jmbag);
+        sb.append(" ".repeat(Math.max(0, jmbagLength - jmbag.length())));
+        sb.append(" | ");
+        sb.append(lastName);
+        sb.append(" ".repeat(Math.max(0, lastNameLength - lastName.length())));
+        sb.append(" | ");
+        sb.append(firstName);
+        sb.append(" ".repeat(Math.max(0, firstNameLength - firstName.length())));
+        sb.append(" | ");
+        sb.append(finalGrade);
+        sb.append(" |\n");
+    } else {
+        sb.append("| ");
+        for (String attribute : showingAttributes) {
+            switch (attribute) {
+                case "jmbag":
+                    sb.append(jmbag);
+                    sb.append(" ".repeat(Math.max(0, jmbagLength - jmbag.length())));
+                    sb.append(" | ");
+                    break;
+                case "lastName":
+                    sb.append(lastName);
+                    sb.append(" ".repeat(Math.max(0, lastNameLength - lastName.length())));
+                    sb.append(" | ");
+                    break;
+                case "firstName":
+                    sb.append(firstName);
+                    sb.append(" ".repeat(Math.max(0, firstNameLength - firstName.length())));
+                    sb.append(" | ");
+                    break;
+                case "finalGrade":
+                    sb.append(finalGrade);
+                    sb.append(" |\n");
+                    break;
+            }
+        }
+        sb.append("\n");
+    }
+
+    return sb.toString();
+}

@@ -1,0 +1,11 @@
+Prvi zadatak sam implementirao kako pise u zadaci, stvorio klasu Processor i Collection.
+
+Drugi zadatak sam prvo odradi osve kako pise i kada je trebalo pisati testove istrazio kako radi JaCoCo da 
+si olaksam pisanje testova, prvo bi ih napisao da pokriju sve u opisu i zatim vidio imam li negdje promaseni kod.
+
+Ista stvar i za treci zadatak, no tu sam razdvojio Common testiranje (ne pohvalno, no presjek je utvrden diffanjem ta dva file-a)
+u vlastiti file, nisam koristio naslijedivanje ili apstrakcije tako da, ukoliko neka metoda ima kakav edge case, ju lakse pokrijem u testovima.
+Stvorio sam Factory i genericki Common tests i njima predao taj Factory za specificni tip, jos jednom provjerio coverage.
+
+Cetvrti zadatak sam samo pratio sto pise, te malo trazio je li moguce testirati sto metoda ispisuje lagano, na kraju nisam, tako da je main jedini dio zadace
+koji nema automatske testove, no pokrenuo sam ga i sve radi okej. Ostale metode su static, sto nije najlijepse, no radi okej.

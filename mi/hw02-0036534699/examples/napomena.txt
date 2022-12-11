@@ -1,0 +1,1 @@
+Isti fileovi kao i u resources, tamo se automatski testiraju.

@@ -1,0 +1,36 @@
+Problem 1 bio je dosta straight forward, eventalno nisam spremao sve main-ove koje sam koristio za izdovenje.
+
+ElementsGetter implementirao sam kako je navedeno.
+Dodao sam modificationCount i testirao ga.
+Dodao sam Tester.
+Brisanjem Metoda koje su sada u List se nije nista breakalo.
+
+Napisao sam testove za sve prateci code coverage kao hint.
+
+Problem 2 je imao vise posla no nije bio tezak.
+
+Unzipao sam sto je trebalo te krenuo pisati Lexer.
+Komentiranjem jednog po jednog disabled testa napisao sam ga.
+
+Dodavao sam novo stanje u lexer istom metodom.
+
+Nisam bio siguran treba li Lexer sam sebi mjenjati stanje, ovdje sam napravio tako, u iducem zadatku ne.
+
+Problem 3 oduzeo mi je dosta vremena.
+
+Prvo sam napravio sve klase zadane i na slijepo napisao njihovu funkcionalnost, kasnije mjenjajuci asText.
+Pokusao sam u isto vrijeme pisati Lexer i Parser i opekao se, obrisao sve i krenuo isponova.
+
+Prvo sam napisao jednostavne testove za Lexer i pokusao dobiti funkcionalnost, zatim dopunio testove do pristojnog coveragea.
+
+Malo se jos nisam ustalio sto ce biti cija odgovornost pa morao mjenjati lexerove tokene, tipa prva ideja mi je bila za -10.0 poslati operator, broj, simbol, broj,
+te onda matchati u parseru, kobna greska, dobio sam grozno stablo if-ova koje se ne moze testirati i ima nepredvidivu cud.
+
+Prepravio sam to prebacivsi odgovornost na lexer.
+
+Razmisljao sam treba li parser biti ovakav kakav je (sa stogom) ili da ga ostvarim rekurzijom, no stog je prevladao.
+Neki su if-ovi preveliki i ne daju se testirati svi branchevi razumnim testovima, morao sam se suzdrzavati ne pisati ih.
+
+Na kraju sam dodao testove koji provjeravaju je li dokument nakon pretvorbe dvaput jednak, tu sam nasao bugova u ispisu te ih popravio.
+Cini mi se kao da imam neke redundantnosti u kodu po coverageu testova, tipa da se kraj inputa detektira na vise mjesta pa do nekih nikad ne dode,
+radije ne bih micao ni ove ostale za svaki slucaj :)
