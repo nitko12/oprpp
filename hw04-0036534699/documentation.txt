@@ -1,0 +1,21 @@
+Pratio sam preporuceni put pisanja, 
+eventualno StudentDB napisao ranije da dobijem osjecaj sto ce ostale klase raditi poimence.
+Formatiranje sam ordaio koristeci metodu repeat podosta.
+
+sb.append("=".repeat(Math.max(0, firstNameLength + 2)));
+
+Isprva sam ju sam napisao, no ubrzo shvatio da ona vec postoji.
+
+Koristio sam i List.of na jednom mjestu.
+
+records = List.of(db.forJMBAG(parser.getQueriedJMBAG()));
+
+Cisto jer olaksa program.
+
+Nisam pisao lexer i parser za obradu query-a nego to ucinio na malo ruzniji nacin,
+dodao bih spaceove oko = i operatora te splitao po njima, tako bih dobio losu verziju
+lexera, tj. izlaz bi bio niz tokeniziranih stringova.
+
+Nakon toga bi ih obilazio 4 po 4 jer je svaki query tocno 3 tokena i and na kraju.
+
+Treba samo provjeriti da su validni i da nema prazan and na kraju/da and ne fali.

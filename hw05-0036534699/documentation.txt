@@ -1,0 +1,37 @@
+Prvi zadatak rjesio sam trazeci razlicite implenetacije streamova za citanje podataka.
+
+Tako tipa mozemo chainati razlicite streamove za razlicito ponasanje, tipa:
+
+try (FileInputStream fis = new FileInputStream(args[0]);
+    InputStreamReader isr = new InputStreamReader(fis, Charset.defaultCharset());
+    BufferedReader reader = new BufferedReader(isr)) { ...
+
+
+A za kriptografiju koristio sam Javine implementacije, one ponekad bacaju mnogo exceptiona, tipa
+
+public static void encryptDecryptStream(
+        InputStream is, OutputStream to,
+        String password, String iv,
+        boolean encrypt)
+        throws NoSuchAlgorithmException,
+        NoSuchPaddingException,
+        InvalidAlgorithmParameterException,
+        InvalidKeyException,
+        BadPaddingException,
+        IllegalBlockSizeException { ...
+
+
+Pa sam ih ovako ispisao u throws te se za njih pobrinuo jednim catchom u pozivu, sto nije najbolje, no premda bi bilo tesko 
+handleati svaku od njih, vjerojatno je ovo dovoljno dobro.
+
+Kljucne su linije:
+
+Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+digest = MessageDigest.getInstance("SHA-256");
+
+Tako sam desifrirao drugi dio.
+
+U njemu sam pratio upute, kreirajuci klase za svaku naredbu, te ih popunjavajuci.
+Eventualno za tree nisam bio najsigurniji kako ga implementirati, pa sam napisao vlastitu rekurzivnu funkciju.
+
+Sve ostalo sam samo pratio kako pise u uputama.
