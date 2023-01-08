@@ -11,6 +11,9 @@ import javax.swing.WindowConstants;
 import hr.fer.zemris.java.gui.layouts.CalcLayout;
 import hr.fer.zemris.java.gui.layouts.RCPosition;
 
+/**
+ * Demo program iz zadaće.
+ */
 public class DemoFrame1 extends JFrame {
     public DemoFrame1() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -21,6 +24,9 @@ public class DemoFrame1 extends JFrame {
 
     }
 
+    /**
+     * Inicijalizacija GUI-a.
+     */
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new CalcLayout(3));
@@ -32,6 +38,12 @@ public class DemoFrame1 extends JFrame {
         cp.add(l("tekst"), new RCPosition(4, 7));
     }
 
+    /**
+     * Vraca JLabel s postavljenim textom i pozadinom.
+     * 
+     * @param text
+     * @return JLabel
+     */
     private JLabel l(String text) {
         JLabel l = new JLabel(text);
         l.setBackground(Color.YELLOW);
@@ -39,6 +51,11 @@ public class DemoFrame1 extends JFrame {
         return l;
     }
 
+    /**
+     * Pokrece program.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new DemoFrame1().setVisible(true);

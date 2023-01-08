@@ -2,12 +2,18 @@ package hr.fer.zemris.math;
 
 import java.util.ArrayList;
 
+/**
+ * Klasa koja predstavlja polinom kompleksnih brojeva definiran koeficijentima.
+ */
 public class ComplexPolynomial {
 
     Complex[] factors;
 
-    // ...
-    // constructor
+    /**
+     * Konstruktor koji tvori polinom kompleksnih brojeva preko niza koeficijenata.
+     * 
+     * @param factors
+     */
     public ComplexPolynomial(Complex... factors) {
 
         int non_zero = 0;
@@ -25,12 +31,21 @@ public class ComplexPolynomial {
         }
     }
 
-    // returns order of this polynom; eg. For (7+2i)z^3+2z^2+5z+1 returns 3
+    /**
+     * Vraća razred polinoma.
+     * 
+     * @return short
+     */
     public short order() {
         return (short) (factors.length - 1);
     }
 
-    // computes a new polynomial this*p
+    /**
+     * Množi polinom s drugim polinomom.
+     * 
+     * @param p
+     * @return ComplexPolynomial
+     */
     public ComplexPolynomial multiply(ComplexPolynomial p) {
         Complex[] res = new Complex[this.order() + p.order() + 1];
 
@@ -47,8 +62,11 @@ public class ComplexPolynomial {
         return new ComplexPolynomial(res);
     }
 
-    // computes first derivative of this polynomial; for example, for //
-    // (7+2i)z^3+2z^2+5z+1 returns (21+6i)z^2+4z+5
+    /**
+     * Racuna prvu derivaciju polinoma.
+     * 
+     * @return ComplexPolynomial
+     */
     public ComplexPolynomial derive() {
         int order = this.order();
 
@@ -61,7 +79,12 @@ public class ComplexPolynomial {
         return new ComplexPolynomial(res);
     }
 
-    // computes polynomial value at given point z
+    /**
+     * Vraca vrijednost polinoma u točki z.
+     * 
+     * @param z
+     * @return Complex
+     */
     public Complex apply(Complex z) {
         Complex res = Complex.ZERO;
 
@@ -72,6 +95,11 @@ public class ComplexPolynomial {
         return res;
     }
 
+    /**
+     * Vraca string reprezentaciju polinoma.
+     * 
+     * @return String
+     */
     @Override
     public String toString() {
 
@@ -106,6 +134,12 @@ public class ComplexPolynomial {
         return sb.toString();
     }
 
+    /**
+     * Uspoređuje dva polinoma.
+     * 
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

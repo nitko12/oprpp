@@ -1,7 +1,7 @@
 package hr.fer.zemris.fraktali;
 
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -10,14 +10,20 @@ import hr.fer.zemris.java.fractals.viewer.FractalViewer;
 import hr.fer.zemris.java.fractals.viewer.IFractalProducer;
 import hr.fer.zemris.java.fractals.viewer.IFractalResultObserver;
 import hr.fer.zemris.math.Complex;
-import hr.fer.zemris.math.ComplexPolynomial;
-import hr.fer.zemris.math.ComplexRootedPolynomial;
 
+/**
+ * Klasa koja paralelizirano računa Newton-Raphson fraktal.
+ */
 public class NewtonParallel extends NetwonBase {
 
     private static int workers = 1;
     private static int tracks = 12;
 
+    /**
+     * Funkcija koja se poziva prilikom pokretanja programa.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
 
         // --workers=2 --tracks=10
@@ -51,6 +57,9 @@ public class NewtonParallel extends NetwonBase {
         FractalViewer.show(new MojProducer());
     }
 
+    /**
+     * Razred koji modelira posao izracuna na jednoj dretvi.
+     */
     public static class PosaoIzracuna implements Runnable {
         double reMin;
         double reMax;
@@ -65,9 +74,27 @@ public class NewtonParallel extends NetwonBase {
         AtomicBoolean cancel;
         public static PosaoIzracuna NO_JOB = new PosaoIzracuna();
 
+        /**
+         * Konstruktor.
+         */
         private PosaoIzracuna() {
         }
 
+        /**
+         * Konstruktor.
+         * 
+         * @param reMin
+         * @param reMax
+         * @param imMin
+         * @param imMax
+         * @param width
+         * @param height
+         * @param yMin
+         * @param yMax
+         * @param m
+         * @param data
+         * @param cancel
+         */
         public PosaoIzracuna(double reMin, double reMax, double imMin,
                 double imMax, int width, int height, int yMin, int yMax,
                 int m, short[] data, AtomicBoolean cancel) {
@@ -85,6 +112,9 @@ public class NewtonParallel extends NetwonBase {
             this.cancel = cancel;
         }
 
+        /**
+         * Metoda koja izračunava Newton-Raphson fraktal.
+         */
         @Override
         public void run() {
 
@@ -93,6 +123,9 @@ public class NewtonParallel extends NetwonBase {
         }
     }
 
+    /**
+     * Razred koji modelira proizvođača Newton-Raphson fraktala paralelno.
+     */
     public static class MojProducer implements IFractalProducer {
         @Override
         public void produce(double reMin, double reMax, double imMin, double imMax,

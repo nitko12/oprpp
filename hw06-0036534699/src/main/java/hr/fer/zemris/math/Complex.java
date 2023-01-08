@@ -3,6 +3,9 @@ package hr.fer.zemris.math;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Klasa koja predstavlja prosti broj.
+ */
 public class Complex {
     public static final Complex ZERO = new Complex(0, 0);
     public static final Complex ONE = new Complex(1, 0);
@@ -13,28 +16,55 @@ public class Complex {
     private double real;
     private double imaginary;
 
+    /**
+     * Konstruktor koji inicializira kompleksni broj na 0+0i.
+     */
     public Complex() {
         this.real = 0;
         this.imaginary = 0;
     }
 
+    /**
+     * Konstruktor koji inicijalizira kompleksni broj na zadanu vrijednost.
+     * 
+     * 
+     * @param re
+     * @param im
+     */
     public Complex(double re, double im) {
         this.real = re;
         this.imaginary = im;
     }
 
-    // returns module of complex number
+    /**
+     * Vraća realni dio kompleksnog broja.
+     * 
+     * @return double
+     */
     public double module() {
         return Math.sqrt(this.real * this.real + this.imaginary * this.imaginary);
     }
 
+    /**
+     * Množi dva kompleksna broja.
+     * Vraća novi kompleksni broj.
+     * 
+     * @param c
+     * @return Complex
+     */
     public Complex multiply(Complex c) {
         double re = this.real * c.real - this.imaginary * c.imaginary;
         double im = this.real * c.imaginary + this.imaginary * c.real;
         return new Complex(re, im);
     }
 
-    // returns this/c
+    /**
+     * Djeli dva kompleksna broja.
+     * Vraća novi kompleksni broj.
+     * 
+     * @param c
+     * @return Complex
+     */
     public Complex divide(Complex c) {
         double re = (this.real * c.real + this.imaginary * c.imaginary) /
                 (c.real * c.real + c.imaginary * c.imaginary);
@@ -43,26 +73,45 @@ public class Complex {
         return new Complex(re, im);
     }
 
-    // returns this+c
+    /**
+     * Zbraja dva kompleksna broja.
+     * 
+     * @param c
+     * @return Complex
+     */
     public Complex add(Complex c) {
         double re = this.real + c.real;
         double im = this.imaginary + c.imaginary;
         return new Complex(re, im);
     }
 
-    // returns this-c
+    /**
+     * Oduzima dva kompleksna broja.
+     * 
+     * @param c
+     * @return Complex
+     */
     public Complex sub(Complex c) {
         double re = this.real - c.real;
         double im = this.imaginary - c.imaginary;
         return new Complex(re, im);
     }
 
-    // returns -this
+    /**
+     * Negira kompleksni broj.
+     * 
+     * @return Complex
+     */
     public Complex negate() {
         return new Complex(-this.real, -this.imaginary);
     }
 
-    // returns this^n, n is non-negative integer
+    /**
+     * Potencira kompleksni broj.
+     * 
+     * @param n
+     * @return Complex
+     */
     public Complex power(int n) {
         if (n == 0) {
             return Complex.ONE;
@@ -75,7 +124,12 @@ public class Complex {
 
     }
 
-    // returns n-th root of this, n is positive integer
+    /**
+     * Vraća n-ti korijen kompleksnog broja.
+     * 
+     * @param n
+     * @return List<Complex>
+     */
     public List<Complex> root(int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("n must be positive integer");
@@ -93,6 +147,12 @@ public class Complex {
         return roots;
     }
 
+    /**
+     * Parsira string u kompleksni broj.
+     * 
+     * @param s
+     * @return Complex
+     */
     public static Complex parse(String s) {
         if (s == null) {
             throw new IllegalArgumentException("String must not be null");
@@ -165,6 +225,11 @@ public class Complex {
         throw new IllegalArgumentException("Samo su a+ib or a-ib legalne forme kompleksnog broja.");
     }
 
+    /**
+     * Vraća kompleksni broj u obliku stringa.
+     * 
+     * @return String
+     */
     @Override
     public String toString() {
 
@@ -179,6 +244,12 @@ public class Complex {
         return this.real + (this.imaginary >= 0 ? "+" : "-") + "i" + Math.abs(this.imaginary);
     }
 
+    /**
+     * Uspoređuje dva kompleksna broja.
+     * 
+     * @param o
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o)

@@ -1,0 +1,23 @@
+1. napravio sam CalcLayout kako je opisano u zadaci.
+Imao sam problema s razmjestajem, te prefered min i max velicinama.
+Kad sam pokrenuo junit test iz zadace sam tek shvatio kako to treba odraditi.
+
+2. Popunjavanje kalkulatora islo je dosla lagano.
+Slucaj invertanja sam odradio tako da svaka invertabilna tipka vraca svoj objekt s funkcijom
+koja ju invertira te dodavajuci invertAll u implementaciju.
+
+Za sto manje redundantnosti, sve sam tipke, njigove pozicije i akcije pisao u arrayeve, koje sam 
+samo popunio, ne mogu se sjetiti boljeg nacina za ovo.
+
+Kod brojeva je to poseban slucaj jer ih popunim for petljom, no lokacije u gridu opet trebaju biti
+hardcode-irane u array.
+
+3. Implementirao sam parser, te crtao sve pomocu Graphics2D metoda.
+
+Nisam potpuno pratio post o crtanju teksta vertikalno, jer sam to odradio s
+graphics2D.rotate(-Math.PI / 2);
+
+umjesto primjene affinih transformacija.
+
+4. Napravio sam model PrimList-e te ih dodao dvije u borderLayout.
+Kako se EAST i WEST ne skaliraju te ostave rupu, stavio sam u CENTER polje gridLayout.

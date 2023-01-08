@@ -1,10 +1,22 @@
 package hr.fer.zemris.math;
 
+/**
+ * Klasa koja modelira polinom kompleksnih brojeva
+ * prema njihovim null-točkama.
+ * 
+ * 
+ */
 public class ComplexRootedPolynomial {
 
     Complex[] roots;
 
-    // constructor
+    /**
+     * Konstruktor koji prima polinom kompleksnih brojeva preko njegove
+     * konstante i niza nul-točaka.
+     * 
+     * @param constant
+     * @param roots
+     */
     public ComplexRootedPolynomial(Complex constant, Complex... roots) {
         this.roots = new Complex[roots.length + 1];
         this.roots[0] = constant;
@@ -14,6 +26,12 @@ public class ComplexRootedPolynomial {
         }
     }
 
+    /**
+     * Izračunava vrijednost polinoma u točki z.
+     * 
+     * @param z
+     * @return Complex
+     */
     // computes polynomial value at given point z
     public Complex apply(Complex z) {
         Complex res = Complex.ZERO;
@@ -25,6 +43,12 @@ public class ComplexRootedPolynomial {
         return res;
     }
 
+    /**
+     * Pretvara polinom kompleksnih brojeva definiran nul-tockama u polinom
+     * kompleksnih brojeva definiranim koeficijentima.
+     * 
+     * @return ComplexPolynomial
+     */
     public ComplexPolynomial toComplexPolynom() {
         ComplexPolynomial res = new ComplexPolynomial(roots[0]);
 
@@ -37,10 +61,13 @@ public class ComplexRootedPolynomial {
         return res;
     }
 
+    /**
+     * Vraca string reprezentaciju polinoma kompleksnih brojeva.
+     * 
+     * @return String
+     */
     @Override
     public String toString() {
-        // (2.0+i0.0)*(z-(1.0+i0.0))*(z-(-1.0+i0.0))*(z-(0.0+i1.0))*(z-(0.0-i1.0))
-
         StringBuilder sb = new StringBuilder();
 
         sb.append("(").append(roots[0]).append(")");
@@ -52,9 +79,13 @@ public class ComplexRootedPolynomial {
         return sb.toString();
     }
 
-    // finds index of closest root for given complex number z that is within //
-    // treshold; if there is no such root, returns -1
-    // first root has index 0, second index 1, etc
+    /**
+     * Vraca najblizu nul-tocku za zadanu kompleksnu vrijednost z.
+     * 
+     * @param z
+     * @param treshold
+     * @return int
+     */
     public int indexOfClosestRootFor(Complex z, double treshold) {
         int index = -1;
         double mnDist = Double.MAX_VALUE;

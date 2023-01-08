@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.gui.layouts;
+package hr.fer.zemris.java.gui.calc.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.junit.jupiter.api.Test;
+
+import hr.fer.zemris.java.gui.layouts.CalcLayout;
+import hr.fer.zemris.java.gui.layouts.CalcLayoutException;
+import hr.fer.zemris.java.gui.layouts.RCPosition;
 
 public class CalcLayoutTest {
     @Test

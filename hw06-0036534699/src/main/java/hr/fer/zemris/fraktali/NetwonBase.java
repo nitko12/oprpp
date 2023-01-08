@@ -8,10 +8,29 @@ import hr.fer.zemris.math.Complex;
 import hr.fer.zemris.math.ComplexPolynomial;
 import hr.fer.zemris.math.ComplexRootedPolynomial;
 
+/**
+ * Razred koji sadrži metode za računanje fraktala Newton-Raphson.
+ * 
+ */
 public class NetwonBase {
 
     protected static List<Complex> roots = new ArrayList<>();
 
+    /**
+     * Metoda koja računa fraktal za dio slike.
+     * 
+     * @param reMin
+     * @param reMax
+     * @param imMin
+     * @param imMax
+     * @param width
+     * @param height
+     * @param m
+     * @param yMin
+     * @param yMax
+     * @param data
+     * @param cancel
+     */
     protected static void calculate(double reMin, double reMax,
             double imMin, double imMax,
             int width, int height,
@@ -66,6 +85,19 @@ public class NetwonBase {
         }
     }
 
+    /**
+     * Mapira x, y piksel na kompleksni broj.
+     * 
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param reMin
+     * @param reMax
+     * @param imMin
+     * @param imMax
+     * @return Complex
+     */
     private static Complex mapToComplexPlain(int x, int y,
             int width, int height,
             double reMin, double reMax,

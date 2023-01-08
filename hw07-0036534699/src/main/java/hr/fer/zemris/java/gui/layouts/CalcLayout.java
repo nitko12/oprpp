@@ -7,9 +7,9 @@ import java.awt.Insets;
 import java.awt.LayoutManager2;
 import java.util.HashMap;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
+/**
+ * Klasa koja predstavlja layout manager za kalkulator.
+ */
 public class CalcLayout implements LayoutManager2 {
 
     private static int ROWS = 5;
@@ -18,6 +18,11 @@ public class CalcLayout implements LayoutManager2 {
 
     HashMap<RCPosition, Component> fields;
 
+    /**
+     * Konstruktor koji prima velicinu razmaka medu komponentama.
+     * 
+     * @param gapSize
+     */
     public CalcLayout(int gapSize) {
         if (gapSize < 0) {
             throw new IllegalArgumentException("Gap size must be greater than 0");
@@ -27,10 +32,21 @@ public class CalcLayout implements LayoutManager2 {
         this.fields = new HashMap<>();
     }
 
+    /**
+     * Konstruktor koji ne prima velicinu razmaka medu komponentama.
+     * 
+     * Defaulta na 0.
+     */
     public CalcLayout() {
         this(0);
     }
 
+    /**
+     * Parsira string i vraca RCPosition.
+     * 
+     * @param name
+     * @return RCPosition
+     */
     public RCPosition parse(String name) {
         String[] parts = name.split(",");
         if (parts.length != 2) {
@@ -51,16 +67,33 @@ public class CalcLayout implements LayoutManager2 {
         return new RCPosition(row, column);
     }
 
+    /**
+     * Ne koristi se.
+     * 
+     * @param name
+     * @param comp
+     */
     @Override
     public void addLayoutComponent(String name, Component comp) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Mice komponentu iz layouta.
+     * 
+     * @param comp
+     */
     @Override
     public void removeLayoutComponent(Component comp) {
         fields.values().remove(comp);
     }
 
+    /**
+     * Vraca izracun preferirane velicine layouta.
+     * 
+     * @param parent
+     * @return Dimension
+     */
     @Override
     public Dimension preferredLayoutSize(Container parent) {
         if (parent == null) {
@@ -70,6 +103,12 @@ public class CalcLayout implements LayoutManager2 {
         return calculateSize(parent, WhatSize.PREFERRED);
     }
 
+    /**
+     * Vracanje minimalne velicine layouta.
+     * 
+     * @param parent
+     * @return Dimension
+     */
     @Override
     public Dimension minimumLayoutSize(Container parent) {
         if (parent == null) {
@@ -78,6 +117,12 @@ public class CalcLayout implements LayoutManager2 {
         return calculateSize(parent, WhatSize.MINIMUM);
     }
 
+    /**
+     * Vraca izracun maksimalne velicine layouta.
+     * 
+     * @param target
+     * @return Dimension
+     */
     @Override
     public Dimension maximumLayoutSize(Container target) {
         if (target == null) {
@@ -90,6 +135,13 @@ public class CalcLayout implements LayoutManager2 {
         MINIMUM, PREFERRED, MAXIMUM
     }
 
+    /**
+     * Racuna velicinu layouta prema enumu koji se proslijedi.
+     * 
+     * @param parent
+     * @param what
+     * @return Dimension
+     */
     public Dimension calculateSize(Container parent, WhatSize what) {
         Insets insets = parent.getInsets();
 
@@ -125,6 +177,11 @@ public class CalcLayout implements LayoutManager2 {
 
     }
 
+    /**
+     * Racuna velicine komponenti i postavlja ih na layout.
+     * 
+     * @param parent
+     */
     @Override
     public void layoutContainer(Container parent) {
         if (parent == null) {
@@ -185,6 +242,12 @@ public class CalcLayout implements LayoutManager2 {
 
     }
 
+    /**
+     * Metoda za dodanje komponenti na layout uz odredenu poziciju.
+     * 
+     * @param comp
+     * @param constraints
+     */
     @Override
     public void addLayoutComponent(Component comp, Object constraints) {
 
@@ -223,21 +286,40 @@ public class CalcLayout implements LayoutManager2 {
         this.fields.put(position, comp);
     }
 
+    /**
+     * Vraca poziciju komponente.
+     * 
+     * @param target
+     * @return float
+     */
     @Override
     public float getLayoutAlignmentX(Container target) {
         return 0;
     }
 
+    /**
+     * Vracanje poziciju komponente.
+     * 
+     * @param target
+     * @return float
+     */
     @Override
     public float getLayoutAlignmentY(Container target) {
         return 0;
     }
 
+    /**
+     * Ne koristi se.
+     * 
+     * @param target
+     */
     @Override
     public void invalidateLayout(Container target) {
         if (target == null) {
             throw new IllegalArgumentException("Target must not be null");
         }
+
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
