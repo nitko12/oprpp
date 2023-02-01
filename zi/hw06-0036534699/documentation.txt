@@ -1,0 +1,7 @@
+1. Implementirati matematiku s kompleksnim brojevima i polinomima nije bio problem,
+eventualno nisam procitao kojim redom primati koeficijente pa je to oduljilo rjesavanje, jer sam 
+koristio drugu konvenciju na vise mjesta.
+Napisao sam testove i testirao code coverage te sada ne bi trebalo biti problema s time.
+
+2. Prvo sam napisao slijedni izracun fraktala vodeci se primjerima u materijalima, samo sam zamjenio sto se dogada u 
+funckiji sto nije bio velik problem, te isto ucinio i za paralelnu uz dodavanje command line argumenata.

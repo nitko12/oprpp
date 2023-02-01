@@ -1,0 +1,17 @@
+Malo sam izmjenio redoslijed kojim je zadaca radena.
+
+Poceo sam od izrade modela te testiranja njih rucno.
+
+Kada su modeli bili izradeni i radili isao sam se upoznati s lokalizacijom.
+Napravivsi primjer iz zadace, kopirao sam datoteke, ikone i prijevode u folder iz kojeg ih ima smisla koristiti.
+
+Lokalizirane komponente su mnogo pomogle u izradi, te se veci dio posla sveo na pisanje akcija.
+
+Nisam bio siguran kako ih tocno modelirati, jer nisam znao cemu sve trebaju moci pristupiti i koliko bi se
+njihova funkcionalnost mogla generalizirati.
+
+Napisao sam ih sve u konstruktoru klase, sto nije najbolje rjesenje i sada bih to napravio drugacije, preferabilno u svojoj klasi
+koja nudi pristup actions mapi.
+
+Problem su zadavali hotkey-ovi. Nakon dosta debuganja problem je rjesen koristenjem isMeta metode, konzumiranjem evenata i
+provjerom je li event koji obradujemo vec konzumiran, jos uvijek ne znam zasto se pojavljuju vise puta.
